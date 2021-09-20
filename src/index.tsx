@@ -1,14 +1,24 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ApolloProvider } from "@apollo/client";
 import { client } from "./utils/apollo";
-import "./index.css";
+import { BrowserRouter as Router } from "react-router-dom";
+import { ChakraProvider } from "@chakra-ui/react";
+import { AuthProvider } from "./context/AuthContext";
+
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <Router>
+        <ChakraProvider>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </ChakraProvider>
+      </Router>
     </ApolloProvider>
   </React.StrictMode>,
   document.getElementById("root")
