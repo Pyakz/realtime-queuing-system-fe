@@ -9,17 +9,16 @@ const Routes = [
     icon: MdDashboard,
     role: ["ADMIN", "STAFF"],
   },
-
-  {
-    path: "/persons",
-    name: "Persons",
-    icon: FiUsers,
-    role: ["ADMIN"],
-  },
   {
     path: "/queues",
     name: "Queues",
     icon: MdFormatListBulleted,
+    role: ["ADMIN"],
+  },
+  {
+    path: "/persons",
+    name: "Persons",
+    icon: FiUsers,
     role: ["ADMIN"],
   },
   {

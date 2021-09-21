@@ -17,6 +17,7 @@ import {
   Icon,
   Button,
   useToast,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { Formik, Form, Field } from "formik";
@@ -75,6 +76,11 @@ const Login = () => {
       .required("Password is required"),
   });
 
+  const textColor = useColorModeValue("gray.500", "gray.500");
+  const ButtonColor = useColorModeValue("blue.400", "blue.400");
+  const BorderColor = useColorModeValue("gray.400", "gray.400");
+  const BGColor = useColorModeValue("white", "white");
+
   return authenticated ? (
     <Redirect to="/dashboard" />
   ) : (
@@ -88,7 +94,7 @@ const Login = () => {
         p={8}
         shadow="lg"
         borderRadius="md"
-        bgColor="white"
+        bg={BGColor}
         style={{
           height: Mobile420 ? "100vh" : "auto",
           width: Mobile420 ? "100vw" : "auto",
@@ -127,7 +133,13 @@ const Login = () => {
                           {...field}
                           id="username"
                           placeholder="Username"
-                          focusBorderColor="gray.400"
+                          focusBorderColor="gray.500"
+                          borderColor={BorderColor}
+                          color={textColor}
+                          sx={{ borderWidth: "1.7px" }}
+                          _hover={{
+                            borderColor: "gray.500",
+                          }}
                         />
                       </InputGroup>
                       <FormErrorMessage>
@@ -159,9 +171,15 @@ const Login = () => {
                           {...field}
                           id="password"
                           placeholder="Password"
-                          focusBorderColor="gray.400"
+                          focusBorderColor="gray.500"
+                          borderColor={BorderColor}
                           pr="4.5rem"
                           type={show ? "text" : "password"}
+                          color={textColor}
+                          sx={{ borderWidth: "1.7px" }}
+                          _hover={{
+                            borderColor: "gray.500",
+                          }}
                         />
                         <InputRightElement width="4.5rem">
                           <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -178,13 +196,19 @@ const Login = () => {
                 <Button
                   mt="1.2rem"
                   isLoading={Loading}
-                  colorScheme="blue"
+                  // colorScheme={}
+                  bg={ButtonColor}
                   width="100%"
                   size="md"
                   type="submit"
+                  color="white"
+                  _hover={{
+                    bg: "blue.700",
+                  }}
+                  // color="white"
                   // rightIcon={<MdArrowForward />}
                 >
-                  Login
+                  Sign in
                 </Button>
               </Form>
             )}

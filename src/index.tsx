@@ -6,14 +6,22 @@ import reportWebVitals from "./reportWebVitals";
 import { ApolloProvider } from "@apollo/client";
 import { client } from "./utils/apollo";
 import { BrowserRouter as Router } from "react-router-dom";
-import { ChakraProvider } from "@chakra-ui/react";
+import { extendTheme, ThemeConfig, ChakraProvider } from "@chakra-ui/react";
 import { AuthProvider } from "./context/AuthContext";
 import "@fontsource/roboto";
+
+const config: ThemeConfig = {
+  initialColorMode: "light",
+  useSystemColorMode: true,
+};
+// 3. extend the theme
+const theme = extendTheme({ config });
+
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
       <Router>
-        <ChakraProvider>
+        <ChakraProvider theme={theme}>
           <AuthProvider>
             <App />
           </AuthProvider>

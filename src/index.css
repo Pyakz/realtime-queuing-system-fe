@@ -5,7 +5,7 @@ body {
   font-family: "Roboto", sans-serif !important;
 }
 .sidebar_active div {
-  background-color: #0bc5ea !important;
+  background-color: #718096!important;
   color: white !important;
 }
 .loader {

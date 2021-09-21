@@ -20,8 +20,9 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  useColorMode,
 } from "@chakra-ui/react";
-import { FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
+import { FiMenu, FiSun, FiChevronDown, FiMoon } from "react-icons/fi";
 import { IconType } from "react-icons";
 import { ReactText } from "react";
 import Routes from "../../routes/routes";
@@ -68,12 +69,13 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
     <Box
       transition="3s ease"
-      bg={useColorModeValue("white", "gray.900")}
+      bg={useColorModeValue("white", "gray.700")}
       borderRight="1px"
-      borderRightColor={useColorModeValue("gray.200", "gray.700")}
+      borderRightColor={useColorModeValue("white", "gray.700")}
       w={{ base: "full", md: 60 }}
       pos="fixed"
       h="full"
+      shadow="sm"
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
@@ -110,11 +112,12 @@ const NavItem = ({ path, icon, children }: NavItemProps) => {
         align="center"
         p="4"
         mx="4"
-        borderRadius="lg"
+        rounded="sm"
+        // borderRadius="lg"
         role="group"
         cursor="pointer"
         _hover={{
-          bg: "cyan.400",
+          bg: "gray.600",
           color: "white",
           transition: ".3s",
         }}
@@ -142,16 +145,17 @@ interface MobileProps extends FlexProps {
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const { auth } = useAuth();
   const history = useHistory();
+  const { colorMode, toggleColorMode } = useColorMode();
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
       px={{ base: 4, md: 4 }}
       height="20"
       alignItems="center"
-      bg={useColorModeValue("white", "gray.900")}
-      borderBottomWidth="1px"
-      borderBottomColor={useColorModeValue("gray.200", "gray.700")}
+      bg={useColorModeValue("white", "gray.700")}
+      borderBottomColor={useColorModeValue("", "gray.700")}
       justifyContent={{ base: "space-between", md: "flex-end" }}
+      shadow="sm"
       {...rest}
     >
       <IconButton
@@ -173,10 +177,13 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 
       <HStack spacing={{ base: "0", md: "6" }}>
         <IconButton
-          size="lg"
-          variant="ghost"
+          size="md"
+          sx={{ mr: "2" }}
+          variant="solid"
           aria-label="open menu"
-          icon={<FiBell />}
+          onClick={toggleColorMode}
+          icon={colorMode === "light" ? <FiMoon /> : <FiSun />}
+          // marginRight={3}
         />
         <Flex alignItems={"center"}>
           <Menu>
@@ -193,8 +200,16 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">{auth?.username || " "}</Text>
-                  <Text fontSize="xs" color="gray.600">
+                  <Text
+                    fontSize="sm"
+                    color={useColorModeValue("gray.600", "gray.100")}
+                  >
+                    {auth?.username || " "}
+                  </Text>
+                  <Text
+                    fontSize="xs"
+                    color={useColorModeValue("gray.600", "gray.100")}
+                  >
                     {auth?.role || " "}
                   </Text>
                 </VStack>
@@ -204,12 +219,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               </HStack>
             </MenuButton>
             <MenuList
-              bg={useColorModeValue("white", "gray.900")}
+              bg={useColorModeValue("white", "gray.700")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
               <MenuItem>Profile</MenuItem>
               <MenuItem>Settings</MenuItem>
-              <MenuItem>Billing</MenuItem>
               <MenuDivider />
               <MenuItem
                 onClick={() => {
