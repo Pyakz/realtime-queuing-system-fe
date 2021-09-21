@@ -15,6 +15,7 @@ import { getAuthToken } from "./token";
 // import { get, isEmpty } from "lodash";
 
 const BASE_URL = "localhost:8080";
+// const URL = process.env.REACT_APP_URL;
 
 const httpLink = createUploadLink({
   uri: `http://${BASE_URL}/graphql`,

@@ -31,8 +31,8 @@ const Routes = [
     role: ["STAFF"],
   },
   {
-    path: "/transcation",
-    name: "Transcation",
+    path: "/transaction",
+    name: "transaction",
     // icon: "FileSearchOutlined",
     role: ["STAFF"],
   },

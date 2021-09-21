@@ -2,7 +2,7 @@ import { Switch, Redirect, Route } from "react-router-dom";
 import PageNotFound from "../pages/errors/PageNotFound";
 import Login from "../pages/login";
 import PersonsPage from "../pages/admin/persons/PersonsPage";
-import StaffPage from "../pages/staff/Staffs";
+import StaffPage from "../pages/staff";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import Queues from "../pages/admin/queues/QueuesPage";
