@@ -9,7 +9,6 @@ import {
   VStack,
   Icon,
   useColorModeValue,
-  Link,
   Drawer,
   DrawerContent,
   Text,
@@ -26,8 +25,9 @@ import { FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
 import { IconType } from "react-icons";
 import { ReactText } from "react";
 import Routes from "../../routes/routes";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { removeAuthToken } from "../../utils/token";
 
 export default function AdminSideBar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -141,7 +141,7 @@ interface MobileProps extends FlexProps {
 }
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const { auth } = useAuth();
-
+  const history = useHistory();
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -211,7 +211,15 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <MenuItem>Settings</MenuItem>
               <MenuItem>Billing</MenuItem>
               <MenuDivider />
-              <MenuItem>Sign out</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  console.log("Logout");
+                  removeAuthToken();
+                  history.push("/");
+                }}
+              >
+                Sign out
+              </MenuItem>
             </MenuList>
           </Menu>
         </Flex>
