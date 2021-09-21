@@ -16,12 +16,12 @@ import { getAuthToken } from "./token";
 
 const BASE_URL = "localhost:8080";
 const PROD_URL = "realtime-queue.herokuapp.com";
-const http = process.env.NODE_ENV !== "production" ? "http" : "https";
+const http = process.env.NODE_ENV === "production" ? "https" : "http";
 // const URL = process.env.REACT_APP_URL;
 
 const httpLink = createUploadLink({
   uri: `${http}://${
-    process.env.NODE_ENV !== "production" ? PROD_URL : BASE_URL
+    process.env.NODE_ENV === "production" ? PROD_URL : BASE_URL
   }/graphql`,
 }) as unknown as ApolloLink;
 
