@@ -1,16 +1,7 @@
-import { Container } from "@chakra-ui/layout";
-import { useAuth } from "../context/AuthContext";
-import Routes from "../routes/routes";
+import AdminSideBar from "../components/layout/AdminSideBar";
 
 const AdminLayout = (props: any) => {
-  const { auth } = useAuth();
-  const availableRoutes = Routes.map((route) => {
-    if (route?.role?.includes(auth?.role || "")) {
-      return route;
-    }
-  });
-  console.log(availableRoutes);
-  return <Container maxW="container.xl">{props.children}</Container>;
+  return <AdminSideBar>{props.children}</AdminSideBar>;
 };
 
 export default AdminLayout;

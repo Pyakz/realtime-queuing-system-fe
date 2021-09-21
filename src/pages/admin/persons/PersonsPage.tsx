@@ -1,5 +1,7 @@
+import AdminSideBar from "../../../components/layout/AdminSideBar";
+
 const PersonsPage = () => {
-  return <div>Person</div>;
+  return <AdminSideBar>Person</AdminSideBar>;
 };
 
 export default PersonsPage;

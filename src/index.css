@@ -1,7 +1,13 @@
 /* html {
   font-family: "Roboto", sans-serif;
 } */
-
+body {
+  font-family: "Roboto", sans-serif !important;
+}
+.sidebar_active div {
+  background-color: #0bc5ea !important;
+  color: white !important;
+}
 .loader {
   width: 60px;
   height: 40px;

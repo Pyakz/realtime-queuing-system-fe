@@ -1,7 +1,7 @@
-import React from "react";
+import AdminSideBar from "../../../components/layout/AdminSideBar";
 
 const Queues = () => {
-  return <div>Qeueues</div>;
+  return <AdminSideBar>Qeueues</AdminSideBar>;
 };
 
 export default Queues;

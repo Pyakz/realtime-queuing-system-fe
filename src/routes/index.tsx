@@ -2,13 +2,16 @@ import { Switch, Redirect, Route } from "react-router-dom";
 import PageNotFound from "../pages/errors/PageNotFound";
 import Login from "../pages/login";
 import PersonsPage from "../pages/admin/persons/PersonsPage";
-import StaffPage from "../pages/staff";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import Queues from "../pages/admin/queues/QueuesPage";
+
 import CounterPage from "../pages/staff/counter/CounterPage";
 import TransactionPage from "../pages/staff/transaction/TransactionPage";
 import Dashboard from "../pages/dashboard";
+import AdminStaffPage from "../pages/admin/staffs/AdminStaffPage";
+
+// import StaffPage from "../pages/staff";
 
 const RoutesComponent = () => {
   return (
@@ -25,7 +28,11 @@ const RoutesComponent = () => {
       />
       <PrivateRoute path="/queues" component={Queues} role={["ADMIN"]} />
       <PrivateRoute path="/persons" component={PersonsPage} role={["ADMIN"]} />
-      <PrivateRoute path="/staffs" component={StaffPage} role={["ADMIN"]} />
+      <PrivateRoute
+        path="/staffs"
+        component={AdminStaffPage}
+        role={["ADMIN"]}
+      />
 
       <PrivateRoute path="/counter" component={CounterPage} role={["STAFF"]} />
       <PrivateRoute

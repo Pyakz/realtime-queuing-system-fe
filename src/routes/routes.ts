@@ -1,39 +1,43 @@
+import { FiSettings, FiBell, FiUsers } from "react-icons/fi";
+
+import { MdDashboard, MdFormatListBulleted, MdPeople } from "react-icons/md";
+
 const Routes = [
   {
     path: "/dashboard",
     name: "Dashboard",
-    // icon: "AppstoreOutlined",
+    icon: MdDashboard,
     role: ["ADMIN", "STAFF"],
   },
 
   {
     path: "/persons",
     name: "Persons",
-    // icon: "FileSearchOutlined",
+    icon: FiUsers,
     role: ["ADMIN"],
   },
   {
     path: "/queues",
     name: "Queues",
-    // icon: "FileSearchOutlined",
+    icon: MdFormatListBulleted,
     role: ["ADMIN"],
   },
   {
     path: "/staffs",
     name: "Staffs",
-    // icon: "FileSearchOutlined",
+    icon: MdPeople,
     role: ["ADMIN"],
   },
   {
     path: "/counter",
     name: "Counter",
-    // icon: "FileSearchOutlined",
+    icon: FiSettings,
     role: ["STAFF"],
   },
   {
     path: "/transaction",
-    name: "transaction",
-    // icon: "FileSearchOutlined",
+    name: "Transaction",
+    icon: FiBell,
     role: ["STAFF"],
   },
 ];

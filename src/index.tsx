@@ -8,7 +8,7 @@ import { client } from "./utils/apollo";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import { AuthProvider } from "./context/AuthContext";
-
+import "@fontsource/roboto";
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
