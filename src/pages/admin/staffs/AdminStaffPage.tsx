@@ -1,7 +1,7 @@
-import AdminSideBar from "../../../components/layout/AdminSideBar";
+import AdminLayout from "../../../layout/AdminLayout";
 
 const AdminStaffPage = () => {
-  return <AdminSideBar>List Of Staff</AdminSideBar>;
+  return <AdminLayout>List Of Staff</AdminLayout>;
 };
 
 export default AdminStaffPage;

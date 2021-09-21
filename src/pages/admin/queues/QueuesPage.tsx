@@ -1,7 +1,7 @@
-import AdminSideBar from "../../../components/layout/AdminSideBar";
+import AdminLayout from "../../../layout/AdminLayout";
 
 const Queues = () => {
-  return <AdminSideBar>Qeueues</AdminSideBar>;
+  return <AdminLayout>Qeueues</AdminLayout>;
 };
 
 export default Queues;
