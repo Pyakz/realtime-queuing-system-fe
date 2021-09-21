@@ -182,7 +182,16 @@ const Login = () => {
                           }}
                         />
                         <InputRightElement width="4.5rem">
-                          <Button h="1.75rem" size="sm" onClick={handleClick}>
+                          <Button
+                            h="1.75rem"
+                            size="sm"
+                            onClick={handleClick}
+                            colorScheme="blue"
+                            color="gray.100"
+                            // _hover={{
+                            //   bg: ButtonColor,
+                            // }}
+                          >
                             {show ? "Hide" : "Show"}
                           </Button>
                         </InputRightElement>
