@@ -33,7 +33,7 @@ const Login = () => {
   const [Mobile420] = useMediaQuery("(max-width: 420px)");
   const [show, setShow] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
-  
+
   const [SignIn, { loading: Loading }] = useMutation(LOGIN);
 
   const Sumbit = async (values: any) => {
@@ -104,7 +104,7 @@ const Login = () => {
           />
 
           <Formik
-            initialValues={{ username: "", password: "" }}
+            initialValues={{ username: "admin", password: "admin" }}
             onSubmit={(values) => Sumbit(values)}
             validationSchema={loginInputSchema}
           >
