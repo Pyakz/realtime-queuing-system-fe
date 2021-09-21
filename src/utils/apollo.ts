@@ -15,10 +15,14 @@ import { getAuthToken } from "./token";
 // import { get, isEmpty } from "lodash";
 
 const BASE_URL = "localhost:8080";
+const PROD_URL = "realtime-queue.herokuapp.com";
+const http = process.env.NODE_ENV !== "production" ? "http" : "https";
 // const URL = process.env.REACT_APP_URL;
 
 const httpLink = createUploadLink({
-  uri: `http://${BASE_URL}/graphql`,
+  uri: `${http}://${
+    process.env.NODE_ENV !== "production" ? PROD_URL : BASE_URL
+  }/graphql`,
 }) as unknown as ApolloLink;
 
 const asyncAuthLink = setContext(() => {
