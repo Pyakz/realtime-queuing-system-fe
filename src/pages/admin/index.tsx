@@ -1,7 +1,7 @@
 import AdminLayout from "../../layout/AdminLayout";
 
 const AdminPage = () => {
-  return <AdminLayout>Admin PAge</AdminLayout>;
+  return <AdminLayout>Dashboard</AdminLayout>;
 };
 
 export default AdminPage;

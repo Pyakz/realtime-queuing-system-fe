@@ -2,6 +2,7 @@ import { useQuery } from "@apollo/client";
 import { Box, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
 import CenterSpinner from "../../../components/common/CenterSpinner";
 import AdminLayout from "../../../layout/AdminLayout";
+import StaffTable from "./StaffTable";
 import { FIND_MANY_USERS } from "./_apolloQueries";
 
 export enum ROLE_ENUM {
@@ -17,10 +18,6 @@ const AdminStaffPage = () => {
   } = useQuery(FIND_MANY_USERS, {
     variables: { query: { role: ROLE_ENUM.STAFF } },
   });
-
-  if (!Loading) {
-    console.log(Data);
-  }
 
   let UI;
   if (!Loading && QueryError) {
@@ -43,7 +40,7 @@ const AdminStaffPage = () => {
   }
 
   if (!Loading && Data) {
-    UI = JSON.stringify(Data.users.results);
+    UI = <StaffTable data={Data} />;
   }
 
   if (Loading && !Data && !QueryError) {

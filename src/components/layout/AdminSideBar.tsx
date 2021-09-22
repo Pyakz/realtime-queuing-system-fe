@@ -52,7 +52,7 @@ export default function AdminSideBar({ children }: { children: ReactNode }) {
         </DrawerContent>
       </Drawer>
       <MobileNav onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
+      <Box ml={{ base: 0, md: 60 }} p="5">
         {children}
       </Box>
     </Box>
