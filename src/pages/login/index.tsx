@@ -55,9 +55,9 @@ const Login = () => {
       if (!toast.isActive("active-toast")) {
         toast({
           id: "active-toast",
-          title: "Invalid Credentials",
-          description: error.message,
-          status: "warning",
+          title: error.message,
+          description: "Please, try again.",
+          status: "error",
           duration: 4000,
           isClosable: true,
           variant: "solid",
