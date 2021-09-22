@@ -12,7 +12,7 @@ import "@fontsource/roboto";
 
 const config: ThemeConfig = {
   initialColorMode: "light",
-  useSystemColorMode: true,
+  // useSystemColorMode: true,
 };
 // 3. extend the theme
 const theme = extendTheme({ config });
