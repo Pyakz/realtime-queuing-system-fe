@@ -14,6 +14,9 @@ const FIND_MANY_QUEUES = gql`
           name
           address
         }
+        processedBy {
+          counterNumber
+        }
         createdAt
         updatedAt
       }

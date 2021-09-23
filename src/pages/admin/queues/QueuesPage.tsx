@@ -2,6 +2,7 @@ import { useQuery } from "@apollo/client";
 import { Box, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
 import CenterSpinner from "../../../components/common/CenterSpinner";
 import AdminLayout from "../../../layout/AdminLayout";
+import QueuesTable from "./QueuesTable";
 import { FIND_MANY_QUEUES } from "./_apolloQueries";
 
 const Queues = () => {
@@ -38,7 +39,7 @@ const Queues = () => {
   }
 
   if (!Loading && Data) {
-    UI = JSON.stringify(Data.queues.results);
+    UI = <QueuesTable data={Data?.queues} />;
   }
 
   if (Loading && !Data && !QueryError) {
@@ -46,7 +47,7 @@ const Queues = () => {
   }
   return (
     <AdminLayout>
-      <Box h="100%">{UI}</Box>
+      <Box>{UI}</Box>
     </AdminLayout>
   );
 };
