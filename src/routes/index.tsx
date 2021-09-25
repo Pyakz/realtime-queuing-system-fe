@@ -9,7 +9,7 @@ import Queues from "../pages/admin/queues/QueuesPage";
 import CounterPage from "../pages/staff/counter/CounterPage";
 import TransactionPage from "../pages/staff/transaction/TransactionPage";
 import Dashboard from "../pages/dashboard";
-import AdminStaffPage from "../pages/admin/staffs/AdminStaffPage";
+import AdminStaffPage from "../pages/admin/staffs/StaffPage";
 
 // import StaffPage from "../pages/staff";
 

@@ -1,4 +1,5 @@
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { useQuery } from "@apollo/client";
+import { DeleteIcon, EditIcon, SearchIcon } from "@chakra-ui/icons";
 import {
   Box,
   Flex,
@@ -9,113 +10,179 @@ import {
   Checkbox,
   useMediaQuery,
   useColorModeValue,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Select,
 } from "@chakra-ui/react";
 import moment from "moment";
+import { useState } from "react";
 import CenterSpinner from "../../../components/common/CenterSpinner";
+import TablePagination from "../../../components/pagination";
+import PerPage from "../../../components/perpage/PerPage";
+import { THeaders } from "../../../components/tableheader/theader";
+import { FIND_MANY_QUEUES } from "./_apolloQueries";
 
-const QueuesTable = ({ data }: any) => {
-  let UI;
+const QueuesTable = () => {
   const [isMobile] = useMediaQuery("(max-width: 599px)");
 
-  if (!data) {
+  const [page, setPage] = useState<number>(1);
+  const [status, setStatus] = useState<string>("ALL");
+  const [perPage, setPerPage] = useState(10);
+
+  const {
+    data: Data,
+    loading: Loading,
+    error: QueryError,
+  } = useQuery(FIND_MANY_QUEUES, {
+    variables: {
+      query: {
+        take: perPage,
+        page: page,
+        status: status,
+      },
+    },
+  });
+
+  let UI;
+
+  if (!Loading && QueryError) {
+    UI = (
+      <Alert
+        status="error"
+        variant="subtle"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        textAlign="center"
+        p={2}
+      >
+        <AlertIcon boxSize="40px" mr={0} />
+        <AlertTitle mt={4} mb={1} fontSize="lg">
+          {QueryError.message}
+        </AlertTitle>
+      </Alert>
+    );
+  }
+
+  if (Loading && !Data && !QueryError) {
     UI = <CenterSpinner />;
   }
-  if (data && data?.totalFiltered !== 0) {
-    UI = data?.results?.map((rowData: any) => <Row rowData={rowData} />);
+
+  if (!Loading && Data && Data?.queues?.totalFiltered !== 0) {
+    UI = Data?.queues?.results?.map((rowData: any) => (
+      <Row rowData={rowData} key={rowData._id} />
+    ));
   }
-  if (data && data?.totalFiltered === 0) {
-    UI = <h1>No Data Found</h1>;
+
+  if (!Loading && Data && Data?.queues?.totalFiltered === 0) {
+    UI = (
+      <Flex justifyContent="center" alignContent="center">
+        <Text fontSize="3xl">No Data Found</Text>
+      </Flex>
+    );
   }
   return (
     <Box pb={5} p={1}>
-      {!isMobile && <THeaders />}
+      <Flex mb="3" p="1" justifyContent="space-between" alignItems="center">
+        <Flex justifyContent="center">
+          <Button colorScheme="gray" size="md" rounded="sm">
+            Download
+          </Button>
+        </Flex>
+
+        <Flex justifyContent="center">
+          <Select
+            w="8rem"
+            rounded="sm"
+            size="md"
+            defaultValue={status}
+            onChange={(e) => setStatus(e.target.value)}
+          >
+            <option value="ALL">All</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="PROCESSING">Processing</option>
+            <option value="PENDING">Pending</option>
+            <option value="CANCELLED">Cancelled</option>
+          </Select>
+          <InputGroup w="15rem" justifySelf="flex-end" mx="2">
+            <InputLeftElement
+              pointerEvents="none"
+              children={<SearchIcon color="gray.300" />}
+            />
+            <Input type="text" placeholder="e.g: 123" rounded="sm" size="md" />
+          </InputGroup>
+        </Flex>
+      </Flex>
+      <THeaders names={["Number", "Created", "Status", "Processed At"]} />
+
       <Box
-        height={isMobile ? "auto" : "70vh"}
-        overflowY={isMobile ? "auto" : "scroll"}
+        height={isMobile ? "auto" : "25rem"}
+        overflow={isMobile ? "scroll" : "scroll"}
         p={1}
+        my="2"
       >
         {UI}
       </Box>
+
+      <Flex mb="3" p="1" justifyContent="space-between" alignItems="center">
+        <TablePagination data={Data?.queues} page={page} setPage={setPage} />
+        <PerPage
+          data={Data?.queues}
+          perPage={perPage}
+          setPerPage={setPerPage}
+        />
+      </Flex>
     </Box>
   );
 };
 
 export default QueuesTable;
 
-export const THeaders = () => {
-  const BG = useColorModeValue("white", "gray.700");
-  const TextColor = useColorModeValue("gray.500", "gray.300");
-
-  return (
-    <SimpleGrid
-      columns={[1, 2, 5]}
-      spacing="15px"
-      shadow="xs"
-      rounded="sm"
-      p={2}
-      bg={BG}
-      color={TextColor}
-      mb="2"
-    >
-      <Flex px={1}>
-        <Text fontSize="md" fontWeight="bold">
-          Number
-        </Text>
-      </Flex>
-      <Flex px={1}>
-        <Text fontSize="md" fontWeight="bold">
-          Created
-        </Text>
-      </Flex>
-      <Flex px={1}>
-        <Text fontSize="md" fontWeight="bold">
-          Status
-        </Text>
-      </Flex>
-      <Flex px={1}>
-        <Text fontSize="md" fontWeight="bold">
-          Processed At
-        </Text>
-      </Flex>
-    </SimpleGrid>
-  );
-};
 export const Row = ({ rowData }: any) => {
   const [isMobile] = useMediaQuery("(max-width: 699px)");
   const BG = useColorModeValue("white", "gray.700");
   return (
     <SimpleGrid
-      columns={[1, 2, 5]}
+      columns={[5, 5, 5]}
       spacing="1.5rem"
       shadow="xs"
       rounded="sm"
       bg={BG}
       p={2}
       my="2"
+      w={isMobile ? "50rem" : "100%"}
       pl={isMobile ? "3" : "0"}
     >
       <Flex alignItems="center" justifyContent="start">
         <Checkbox colorScheme="blue" mx="2" />
         <Text fontSize="xl" fontStyle="bold">
-          {isMobile && "Number: "} {rowData?.number}
+          {rowData?.number}
         </Text>
       </Flex>
       <Flex alignItems="center" justifyContent="start">
         <Text fontSize="md" ml={isMobile ? "1" : "0"}>
-          {isMobile && "Created: "}
           {moment(rowData?.createdAt).format("MMM D YYYY, h:mm:ss a")}
         </Text>
       </Flex>
 
       <Flex alignItems="center" justifyContent="start">
-        {isMobile && (
-          <Text fontSize="md" ml={isMobile ? "1" : "0"}>
-            Status:
-          </Text>
-        )}
         <Tag
           variant="solid"
-          colorScheme="green"
+          colorScheme={
+            rowData?.status === "COMPLETED"
+              ? "green"
+              : rowData?.status === "PROCESSING"
+              ? "blue"
+              : rowData?.status === "PENDING"
+              ? "gray"
+              : rowData?.status === "CANCELLED"
+              ? "red"
+              : "gray"
+          }
           borderRadius="full"
           ml={isMobile ? "1" : "0"}
         >
@@ -129,15 +196,15 @@ export const Row = ({ rowData }: any) => {
         ml={isMobile ? "1" : "3"}
       >
         <Text fontSize="md">
-          {isMobile && "Processed At: "}
-          {rowData?.processedBy?.counterNumber}
+          Counter: {rowData?.processedBy?.counterNumber}
         </Text>
       </Flex>
       <Flex
-        alignItems="center"
-        justifyContent="start"
         my={isMobile ? 2 : 0}
         flexDirection={isMobile ? "column" : "row"}
+        sx={{
+          marginLeft: "-2.5rem",
+        }}
       >
         <Button
           mx="1"
@@ -146,7 +213,6 @@ export const Row = ({ rowData }: any) => {
           onClick={() => alert(rowData?._id)}
           size="sm"
           my={isMobile ? 2 : 0}
-          w={isMobile ? "100%" : "100%"}
           px={5}
         >
           Remove
@@ -158,7 +224,6 @@ export const Row = ({ rowData }: any) => {
           colorScheme="blue"
           size="sm"
           my={isMobile ? 2 : 0}
-          w={isMobile ? "100%" : "100%"}
         >
           View
         </Button>

@@ -6,7 +6,6 @@ import {
   AlertTitle,
   Box,
   Button,
-  Checkbox,
   Flex,
   Input,
   InputGroup,
@@ -15,7 +14,9 @@ import {
   Tag,
   useColorModeValue,
   useMediaQuery,
+  Checkbox,
   Text,
+  Select,
 } from "@chakra-ui/react";
 import moment from "moment";
 import { useState } from "react";
@@ -23,34 +24,31 @@ import CenterSpinner from "../../../components/common/CenterSpinner";
 import TablePagination from "../../../components/pagination";
 import PerPage from "../../../components/perpage/PerPage";
 import { THeaders } from "../../../components/tableheader/theader";
-import { FIND_MANY_USERS } from "./_apolloQueries";
+import { FIND_MANY_PERSON } from "./_apolloQueries";
 
-export enum ROLE_ENUM {
-  ADMIN = "ADMIN",
-  STAFF = "STAFF",
-}
-
-const StaffTable = () => {
+const PersonsTable = () => {
   const [isMobile] = useMediaQuery("(max-width: 599px)");
   const [perPage, setPerPage] = useState(10);
   const [page, setPage] = useState<number>(1);
+  const [name, setName] = useState<string>("");
+
   let UI;
   const {
     data: Data,
     loading: Loading,
     error: QueryError,
-  } = useQuery(FIND_MANY_USERS, {
+  } = useQuery(FIND_MANY_PERSON, {
     variables: {
       query: {
-        role: ROLE_ENUM.STAFF,
         take: perPage,
         page: page,
+        name: name.toLowerCase(),
       },
     },
   });
 
   if (!Loading && QueryError) {
-    return (
+    UI = (
       <Alert
         status="error"
         variant="subtle"
@@ -67,14 +65,15 @@ const StaffTable = () => {
       </Alert>
     );
   }
-  if (!Loading && Data && Data?.users?.totalFiltered !== 0) {
-    UI = Data?.users?.results?.map((rowData: any) => (
+
+  if (!Loading && Data && Data?.persons?.totalFiltered !== 0) {
+    UI = Data?.persons?.results?.map((rowData: any) => (
       <Row rowData={rowData} key={rowData._id} />
     ));
   }
 
   if (Loading && !Data && !QueryError) {
-    return <CenterSpinner />;
+    UI = <CenterSpinner />;
   }
   return (
     <Box pb={5} p={1}>
@@ -93,14 +92,15 @@ const StaffTable = () => {
             />
             <Input
               type="text"
-              placeholder="e.g: Mark Vergel"
+              placeholder="e.g: Search by Counter #"
               rounded="sm"
               size="md"
+              onChange={(e: any) => setName(e.target.value)}
             />
           </InputGroup>
         </Flex>
       </Flex>
-      <THeaders names={["Full Name", "Created", "Counter #"]} />
+      <THeaders names={["Name", "Created", "Processed At"]} />
 
       <Box
         height={isMobile ? "auto" : "25rem"}
@@ -111,14 +111,18 @@ const StaffTable = () => {
         {UI}
       </Box>
       <Flex mb="3" p="1" justifyContent="space-between" alignItems="center">
-        <TablePagination data={Data?.users} page={page} setPage={setPage} />
-        <PerPage data={Data?.users} perPage={perPage} setPerPage={setPerPage} />
+        <TablePagination data={Data?.persons} page={page} setPage={setPage} />
+        <PerPage
+          data={Data?.persons}
+          perPage={perPage}
+          setPerPage={setPerPage}
+        />
       </Flex>
     </Box>
   );
 };
 
-export default StaffTable;
+export default PersonsTable;
 
 export const Row = ({ rowData }: any) => {
   const [isMobile] = useMediaQuery("(max-width: 699px)");
@@ -138,7 +142,7 @@ export const Row = ({ rowData }: any) => {
       <Flex alignItems="center" justifyContent="start">
         <Checkbox colorScheme="blue" mx="2" />
         <Text fontSize="xl" fontStyle="bold">
-          {rowData?.username}
+          {rowData?.name}
         </Text>
       </Flex>
 
@@ -162,25 +166,15 @@ export const Row = ({ rowData }: any) => {
         }}
       >
         <Text fontSize="md" sx={{ mr: "2" }}>
-          Counter: {rowData?.processedBy?.counterNumber}
+          Counter:
         </Text>
         <Tag
           variant="solid"
-          colorScheme={
-            rowData?.status === "COMPLETED"
-              ? "green"
-              : rowData?.status === "PROCESSING"
-              ? "blue"
-              : rowData?.status === "PENDING"
-              ? "gray"
-              : rowData?.status === "CANCELLED"
-              ? "red"
-              : "gray"
-          }
+          colorScheme="gray"
           borderRadius="full"
           ml={isMobile ? "1" : "0"}
         >
-          {rowData?.counterNumber}
+          {rowData?.processedBy?.counterNumber}
         </Tag>
       </Flex>
 

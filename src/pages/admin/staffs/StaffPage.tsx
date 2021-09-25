@@ -1,15 +1,15 @@
 import { Box } from "@chakra-ui/react";
 import AdminLayout from "../../../layout/AdminLayout";
-import PersonsTable from "./PersonsTable";
+import StaffTable from "./StaffTable";
 
-const PersonPage = () => {
+const AdminStaffPage = () => {
   return (
     <AdminLayout>
       <Box>
-        <PersonsTable />
+        <StaffTable />
       </Box>
     </AdminLayout>
   );
 };
 
-export default PersonPage;
+export default AdminStaffPage;
