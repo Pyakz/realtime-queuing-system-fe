@@ -6,7 +6,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-const THeader = ({ names }: any) => {
+const TableHeader = ({ names }: any) => {
   const BG = useColorModeValue("white", "gray.700");
   const TextColor = useColorModeValue("gray.500", "gray.300");
   return (
@@ -33,4 +33,4 @@ const THeader = ({ names }: any) => {
   );
 };
 
-export default THeader;
+export default TableHeader;

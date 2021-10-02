@@ -20,9 +20,9 @@ import {
 import moment from "moment";
 import { useState } from "react";
 import CenterSpinner from "../../../components/common/CenterSpinner";
-import TablePagination from "../../../components/pagination";
-import PerPage from "../../../components/perpage/PerPage";
-import THeader from "../../../components/tableheader/THeader";
+import TablePagination from "../../../components/Pagination";
+import PerPage from "../../../components/Perpage";
+import TableHeader from "../../../components/TableHeader";
 import { FIND_MANY_PERSON } from "./_apolloQueries";
 
 const PersonsTable = () => {
@@ -108,7 +108,7 @@ const PersonsTable = () => {
           </InputGroup>
         </Flex>
       </Flex>
-      <THeader names={["Name", "Created", "Processed At"]} />
+      <TableHeader names={["Name", "Created", "Processed At"]} />
 
       <Box
         height={isMobile ? "auto" : "25rem"}

@@ -8,7 +8,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-const PerPage = ({ perPage, setPerPage, data }: any) => {
+const Perpage = ({ perPage, setPerPage, data }: any) => {
   return (
     <Flex flexDirection="column">
       <NumberInput
@@ -32,4 +32,4 @@ const PerPage = ({ perPage, setPerPage, data }: any) => {
   );
 };
 
-export default PerPage;
+export default Perpage;

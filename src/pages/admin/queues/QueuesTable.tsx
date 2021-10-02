@@ -18,9 +18,9 @@ import {
 import moment from "moment";
 import { useState } from "react";
 import CenterSpinner from "../../../components/common/CenterSpinner";
-import TablePagination from "../../../components/pagination";
-import PerPage from "../../../components/perpage/PerPage";
-import THeader from "../../../components/tableheader/THeader";
+import TablePagination from "../../../components/Pagination";
+import PerPage from "../../../components/Perpage";
+import THeader from "../../../components/TableHeader";
 import { FIND_MANY_QUEUES } from "./_apolloQueries";
 
 const QueuesTable = () => {
