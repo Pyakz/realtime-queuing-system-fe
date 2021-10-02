@@ -20,9 +20,9 @@ import {
 import moment from "moment";
 import { useState } from "react";
 import CenterSpinner from "../../../components/common/CenterSpinner";
-import Pagination from "../../../components/Pagination/Pagination";
-import PerPage from "../../../components/Perpage/Perpage";
-import TableHeader from "../../../components/TableHeader/TableHeader";
+import Pagination from "../../../components/Pagination";
+import PerPage from "../../../components/Perpage";
+import TableHeader from "../../../components/TableHeader";
 import { FIND_MANY_PERSON } from "./_apolloQueries";
 
 const PersonsTable = () => {
