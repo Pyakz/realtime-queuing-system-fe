@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { DeleteIcon, EditIcon, SearchIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import {
   Box,
   Flex,
@@ -13,9 +13,6 @@ import {
   Alert,
   AlertIcon,
   AlertTitle,
-  Input,
-  InputGroup,
-  InputLeftElement,
   Select,
 } from "@chakra-ui/react";
 import moment from "moment";
@@ -23,7 +20,7 @@ import { useState } from "react";
 import CenterSpinner from "../../../components/common/CenterSpinner";
 import TablePagination from "../../../components/pagination";
 import PerPage from "../../../components/perpage/PerPage";
-import { THeaders } from "../../../components/tableheader/theader";
+import THeader from "../../../components/tableheader/THeader";
 import { FIND_MANY_QUEUES } from "./_apolloQueries";
 
 const QueuesTable = () => {
@@ -68,10 +65,6 @@ const QueuesTable = () => {
     );
   }
 
-  if (Loading && !Data && !QueryError) {
-    UI = <CenterSpinner />;
-  }
-
   if (!Loading && Data && Data?.queues?.totalFiltered !== 0) {
     UI = Data?.queues?.results?.map((rowData: any) => (
       <Row rowData={rowData} key={rowData._id} />
@@ -85,6 +78,10 @@ const QueuesTable = () => {
       </Flex>
     );
   }
+  
+  if (Loading && !Data && !QueryError) {
+    UI = <CenterSpinner />;
+  }
   return (
     <Box pb={5} p={1}>
       <Flex mb="3" p="1" justifyContent="space-between" alignItems="center">
@@ -96,7 +93,7 @@ const QueuesTable = () => {
 
         <Flex justifyContent="center">
           <Select
-            w="8rem"
+            w="10rem"
             rounded="sm"
             size="md"
             defaultValue={status}
@@ -108,16 +105,9 @@ const QueuesTable = () => {
             <option value="PENDING">Pending</option>
             <option value="CANCELLED">Cancelled</option>
           </Select>
-          <InputGroup w="15rem" justifySelf="flex-end" mx="2">
-            <InputLeftElement
-              pointerEvents="none"
-              children={<SearchIcon color="gray.300" />}
-            />
-            <Input type="text" placeholder="e.g: 123" rounded="sm" size="md" />
-          </InputGroup>
         </Flex>
       </Flex>
-      <THeaders names={["Number", "Created", "Status", "Processed At"]} />
+      <THeader names={["Number", "Created", "Status", "Processed At"]} />
 
       <Box
         height={isMobile ? "auto" : "25rem"}

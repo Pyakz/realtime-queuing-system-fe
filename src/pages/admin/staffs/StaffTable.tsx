@@ -22,7 +22,7 @@ import { useState } from "react";
 import CenterSpinner from "../../../components/common/CenterSpinner";
 import TablePagination from "../../../components/pagination";
 import PerPage from "../../../components/perpage/PerPage";
-import { THeaders } from "../../../components/tableheader/theader";
+import THeader from "../../../components/tableheader/THeader";
 import { FIND_MANY_USERS } from "./_apolloQueries";
 
 export enum ROLE_ENUM {
@@ -34,6 +34,8 @@ const StaffTable = () => {
   const [isMobile] = useMediaQuery("(max-width: 599px)");
   const [perPage, setPerPage] = useState(10);
   const [page, setPage] = useState<number>(1);
+  const [name, setName] = useState<string>("");
+
   let UI;
   const {
     data: Data,
@@ -45,6 +47,7 @@ const StaffTable = () => {
         role: ROLE_ENUM.STAFF,
         take: perPage,
         page: page,
+        name: name.toLowerCase(),
       },
     },
   });
@@ -67,6 +70,7 @@ const StaffTable = () => {
       </Alert>
     );
   }
+
   if (!Loading && Data && Data?.users?.totalFiltered !== 0) {
     UI = Data?.users?.results?.map((rowData: any) => (
       <Row rowData={rowData} key={rowData._id} />
@@ -74,8 +78,17 @@ const StaffTable = () => {
   }
 
   if (Loading && !Data && !QueryError) {
-    return <CenterSpinner />;
+    UI = <CenterSpinner />;
   }
+
+  if (!Loading && Data && Data?.users?.totalFiltered === 0) {
+    UI = (
+      <Flex justifyContent="center" alignContent="center">
+        <Text fontSize="3xl">No Data Found</Text>
+      </Flex>
+    );
+  }
+
   return (
     <Box pb={5} p={1}>
       <Flex mb="3" p="1" justifyContent="space-between" alignItems="center">
@@ -93,14 +106,15 @@ const StaffTable = () => {
             />
             <Input
               type="text"
-              placeholder="e.g: Mark Vergel"
+              placeholder="e.g: marky"
               rounded="sm"
               size="md"
+              onChange={(e: any) => setName(e.target.value)}
             />
           </InputGroup>
         </Flex>
       </Flex>
-      <THeaders names={["Full Name", "Created", "Counter #"]} />
+      <THeader names={["Full Name", "Created", "Counter #"]} />
 
       <Box
         height={isMobile ? "auto" : "25rem"}

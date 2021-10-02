@@ -16,14 +16,13 @@ import {
   useMediaQuery,
   Checkbox,
   Text,
-  Select,
 } from "@chakra-ui/react";
 import moment from "moment";
 import { useState } from "react";
 import CenterSpinner from "../../../components/common/CenterSpinner";
 import TablePagination from "../../../components/pagination";
 import PerPage from "../../../components/perpage/PerPage";
-import { THeaders } from "../../../components/tableheader/theader";
+import THeader from "../../../components/tableheader/THeader";
 import { FIND_MANY_PERSON } from "./_apolloQueries";
 
 const PersonsTable = () => {
@@ -75,6 +74,15 @@ const PersonsTable = () => {
   if (Loading && !Data && !QueryError) {
     UI = <CenterSpinner />;
   }
+
+  if (!Loading && Data && Data?.persons?.totalFiltered === 0) {
+    UI = (
+      <Flex justifyContent="center" alignContent="center">
+        <Text fontSize="3xl">No Data Found</Text>
+      </Flex>
+    );
+  }
+
   return (
     <Box pb={5} p={1}>
       <Flex mb="3" p="1" justifyContent="space-between" alignItems="center">
@@ -92,7 +100,7 @@ const PersonsTable = () => {
             />
             <Input
               type="text"
-              placeholder="e.g: Search by Counter #"
+              placeholder="e.g: marky"
               rounded="sm"
               size="md"
               onChange={(e: any) => setName(e.target.value)}
@@ -100,7 +108,7 @@ const PersonsTable = () => {
           </InputGroup>
         </Flex>
       </Flex>
-      <THeaders names={["Name", "Created", "Processed At"]} />
+      <THeader names={["Name", "Created", "Processed At"]} />
 
       <Box
         height={isMobile ? "auto" : "25rem"}

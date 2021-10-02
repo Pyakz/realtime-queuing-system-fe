@@ -6,7 +6,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-export const THeaders = ({ names }: any) => {
+const THeader = ({ names }: any) => {
   const BG = useColorModeValue("white", "gray.700");
   const TextColor = useColorModeValue("gray.500", "gray.300");
   return (
@@ -20,9 +20,9 @@ export const THeaders = ({ names }: any) => {
       bg={BG}
       color={TextColor}
     >
-      {names.map((name: string) => (
+      {names.map((name: string, index: number) => (
         <Flex key={name}>
-          <Checkbox colorScheme="blue" mr="2" />
+          {index === 0 && <Checkbox colorScheme="blue" mr="2" />}
 
           <Text fontSize="md" fontWeight="bold">
             {name}
@@ -32,3 +32,5 @@ export const THeaders = ({ names }: any) => {
     </SimpleGrid>
   );
 };
+
+export default THeader;
