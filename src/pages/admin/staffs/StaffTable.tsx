@@ -20,7 +20,7 @@ import {
 import moment from "moment";
 import { useState } from "react";
 import CenterSpinner from "../../../components/common/CenterSpinner";
-import Pagination from "../../../components/Pagination";
+import Pagination from "../../../components/Pagination/index";
 import PerPage from "../../../components/Perpage";
 import THeader from "../../../components/TableHeader";
 import { FIND_MANY_USERS } from "./_apolloQueries";
