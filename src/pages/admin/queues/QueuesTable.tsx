@@ -78,7 +78,7 @@ const QueuesTable = () => {
       </Flex>
     );
   }
-  
+
   if (Loading && !Data && !QueryError) {
     UI = <CenterSpinner />;
   }
@@ -97,7 +97,9 @@ const QueuesTable = () => {
             rounded="sm"
             size="md"
             defaultValue={status}
-            onChange={(e) => setStatus(e.target.value)}
+            onChange={(e) => {
+              setTimeout(() => setStatus(e.target.value), 100);
+            }}
           >
             <option value="ALL">All</option>
             <option value="COMPLETED">Completed</option>

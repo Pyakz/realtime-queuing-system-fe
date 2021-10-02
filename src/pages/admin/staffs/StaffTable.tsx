@@ -109,7 +109,9 @@ const StaffTable = () => {
               placeholder="e.g: marky"
               rounded="sm"
               size="md"
-              onChange={(e: any) => setName(e.target.value)}
+              onChange={(e: any) =>
+                setTimeout(() => setName(e.target.value), 300)
+              }
             />
           </InputGroup>
         </Flex>
