@@ -4,9 +4,9 @@
   "private": true,
   "dependencies": {
     "@ajna/pagination": "^1.4.13",
-    "@apollo/client": "^3.4.12",
+    "@apollo/client": "^3.4.15",
     "@chakra-ui/icons": "^1.0.15",
-    "@chakra-ui/react": "^1.6.7",
+    "@chakra-ui/react": "^1.6.8",
     "@emotion/react": "11",
     "@emotion/styled": "11",
     "@fontsource/roboto": "^4.5.0",

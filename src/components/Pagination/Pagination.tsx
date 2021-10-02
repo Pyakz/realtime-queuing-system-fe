@@ -10,6 +10,7 @@ import {
 } from "@ajna/pagination";
 import { useColorModeValue } from "@chakra-ui/color-mode";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+
 const Pagination = ({ data, page, setPage }: any) => {
   const { currentPage, setCurrentPage, pagesCount, pages } = usePagination({
     pagesCount: data?.pages,
