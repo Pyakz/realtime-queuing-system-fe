@@ -1,5 +1,5 @@
 import {
-  Pagination,
+  Pagination as PaginationComponent,
   usePagination,
   PaginationNext,
   PaginationPage,
@@ -10,7 +10,7 @@ import {
 } from "@ajna/pagination";
 import { useColorModeValue } from "@chakra-ui/color-mode";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-const TablePagination = ({ data, page, setPage }: any) => {
+const Pagination = ({ data, page, setPage }: any) => {
   const { currentPage, setCurrentPage, pagesCount, pages } = usePagination({
     pagesCount: data?.pages,
     initialState: { currentPage: page },
@@ -21,7 +21,7 @@ const TablePagination = ({ data, page, setPage }: any) => {
     },
   });
   return (
-    <Pagination
+    <PaginationComponent
       pagesCount={pagesCount}
       currentPage={currentPage}
       onPageChange={setCurrentPage}
@@ -64,8 +64,8 @@ const TablePagination = ({ data, page, setPage }: any) => {
           onClick={() => setPage((prev: number) => prev + 1)}
         />
       </PaginationContainer>
-    </Pagination>
+    </PaginationComponent>
   );
 };
 
-export default TablePagination;
+export default Pagination;

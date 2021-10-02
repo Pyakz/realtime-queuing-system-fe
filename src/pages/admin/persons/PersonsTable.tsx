@@ -20,7 +20,7 @@ import {
 import moment from "moment";
 import { useState } from "react";
 import CenterSpinner from "../../../components/common/CenterSpinner";
-import TablePagination from "../../../components/Pagination";
+import Pagination from "../../../components/Pagination";
 import PerPage from "../../../components/Perpage";
 import TableHeader from "../../../components/TableHeader";
 import { FIND_MANY_PERSON } from "./_apolloQueries";
@@ -119,7 +119,7 @@ const PersonsTable = () => {
         {UI}
       </Box>
       <Flex mb="3" p="1" justifyContent="space-between" alignItems="center">
-        <TablePagination data={Data?.persons} page={page} setPage={setPage} />
+        <Pagination data={Data?.persons} page={page} setPage={setPage} />
         <PerPage
           data={Data?.persons}
           perPage={perPage}

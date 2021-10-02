@@ -20,7 +20,7 @@ import {
 import moment from "moment";
 import { useState } from "react";
 import CenterSpinner from "../../../components/common/CenterSpinner";
-import TablePagination from "../../../components/Pagination";
+import Pagination from "../../../components/Pagination";
 import PerPage from "../../../components/Perpage";
 import THeader from "../../../components/TableHeader";
 import { FIND_MANY_USERS } from "./_apolloQueries";
@@ -125,7 +125,7 @@ const StaffTable = () => {
         {UI}
       </Box>
       <Flex mb="3" p="1" justifyContent="space-between" alignItems="center">
-        <TablePagination data={Data?.users} page={page} setPage={setPage} />
+        <Pagination data={Data?.users} page={page} setPage={setPage} />
         <PerPage data={Data?.users} perPage={perPage} setPerPage={setPerPage} />
       </Flex>
     </Box>

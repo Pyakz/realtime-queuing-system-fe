@@ -18,7 +18,7 @@ import {
 import moment from "moment";
 import { useState } from "react";
 import CenterSpinner from "../../../components/common/CenterSpinner";
-import TablePagination from "../../../components/Pagination";
+import Pagination from "../../../components/Pagination";
 import PerPage from "../../../components/Perpage";
 import THeader from "../../../components/TableHeader";
 import { FIND_MANY_QUEUES } from "./_apolloQueries";
@@ -119,7 +119,7 @@ const QueuesTable = () => {
       </Box>
 
       <Flex mb="3" p="1" justifyContent="space-between" alignItems="center">
-        <TablePagination data={Data?.queues} page={page} setPage={setPage} />
+        <Pagination data={Data?.queues} page={page} setPage={setPage} />
         <PerPage
           data={Data?.queues}
           perPage={perPage}
