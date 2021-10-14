@@ -110,7 +110,7 @@ const Login = () => {
           />
 
           <Formik
-            initialValues={{ username: "admin", password: "admin" }}
+            initialValues={{ username: "staff", password: "staff" }}
             onSubmit={(values) => Sumbit(values)}
             validationSchema={loginInputSchema}
           >
