@@ -1,18 +1,18 @@
 import { gql } from "@apollo/client";
 
-const FIND_MANY_QUEUES = gql`
-  query Queues($query: Pagination!) {
-    queues(query: $query) {
-      results {
-        _id
-        status
-        number
-      }
-      total
-      totalFiltered
-      pages
+const CURRENT_QUEUES = gql`
+  query Current {
+  currentQueueByUser {
+    current {
+      _id
+      number
+    }
+    next {
+      _id
+      number
     }
   }
+}
 `;
 
-export { FIND_MANY_QUEUES };
+export { CURRENT_QUEUES };

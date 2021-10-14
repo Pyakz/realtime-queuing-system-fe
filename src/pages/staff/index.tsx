@@ -8,12 +8,11 @@ import {
   Alert,
   AlertIcon,
   AlertTitle,
-  Spinner,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import CenterSpinner from "../../components/common/CenterSpinner";
 import StaffLayout from "../../layout/StaffLayout";
-import { FIND_MANY_QUEUES } from "./__apolloQueries";
+import { CURRENT_QUEUES } from "./__apolloQueries";
 
 export enum STATUS_ENUM {
   PENDING = "PENDING",
@@ -27,18 +26,9 @@ const StaffPage = () => {
     data: Data,
     loading: Loading,
     error: QueryError,
-  } = useQuery(FIND_MANY_QUEUES, {
-    variables: {
-      query: {
-        take: 10,
-        page: 1,
-        byUser: true,
-      },
-    },
-  });
+  } = useQuery(CURRENT_QUEUES);
 
   let UI;
-
   if (!Loading && QueryError) {
     return (
       <Alert
@@ -58,15 +48,15 @@ const StaffPage = () => {
     );
   }
 
-  if (!Loading && Data && Data?.queues?.totalFiltered !== 0) {
-    UI = <QueuesBody data={Data.queues.results} />;
+  if (!Loading && Data && Data?.currentQueueByUser) {
+    UI = <QueuesBody data={Data?.currentQueueByUser} />;
   }
 
   if (Loading && !Data && !QueryError) {
     UI = <CenterSpinner />;
   }
 
-  if (!Loading && Data && Data?.queues?.totalFiltered === 0) {
+  if (!Loading && Data && !Data?.currentQueueByUser) {
     UI = (
       <Flex justifyContent="center" alignContent="center">
         <Text fontSize="3xl">No Data Found</Text>
@@ -86,37 +76,8 @@ type TPreviousBox = {
 
 const QueuesBody = (props: any) => {
   const { data } = props;
-  const [getNextQueue, { loading: NextLoading, data: Next }] = useLazyQuery(
-    FIND_MANY_QUEUES,
-    {
-      variables: {
-        query: {
-          take: 1,
-          page: 1,
-          status: STATUS_ENUM.PENDING,
-        },
-      },
-    }
-  );
-
-  const [getCurrentQueue, { loading: CurrentLoading, data: Current }] =
-    useLazyQuery(FIND_MANY_QUEUES, {
-      variables: {
-        query: {
-          take: 1,
-          page: 1,
-          status: STATUS_ENUM.PROCESSING,
-        },
-      },
-    });
-
-  useEffect(() => {
-    getNextQueue();
-    getCurrentQueue();
-  }, []);
-
-  // const nextNumber = Next?.queues?.results[0]._id;
-  const currentNumber = Current?.queues?.results[0];
+  const currentNumber = data.current;
+  const nextNumber = data.next;
 
   return (
     <div className="parent">
@@ -137,20 +98,32 @@ const QueuesBody = (props: any) => {
             Ticket Number
           </Text>
           <Box rounded="md" borderColor="orange" bg="orange" m="5" py="8">
-            {CurrentLoading ? (
-              <Spinner />
-            ) : (
-              <Text fontSize="9xl" color="white" fontWeight="bold">
-                {currentNumber?.number}
-              </Text>
-            )}
+            <Text fontSize="9xl" color="white" fontWeight="bold">
+              {currentNumber?.number}
+            </Text>
           </Box>
           <Flex justifyContent="center" p="3">
-            <Button size="lg" mx="2" colorScheme="red" w="100%">
-              {CurrentLoading ? <Spinner /> : "Next"}
+            <Button
+              size="lg"
+              mx="2"
+              colorScheme="red"
+              w="100%"
+              onClick={() => {
+                console.table(currentNumber);
+              }}
+            >
+              Cancel
             </Button>
-            <Button size="lg" mx="2" colorScheme="green" w="100%">
-              {NextLoading ? <Spinner /> : "Next"}
+            <Button
+              size="lg"
+              mx="2"
+              colorScheme="green"
+              w="100%"
+              onClick={() => {
+                console.table(nextNumber);
+              }}
+            >
+              Next
             </Button>
           </Flex>
         </Box>
@@ -176,13 +149,13 @@ const QueuesBody = (props: any) => {
           overflowY="scroll"
           height="28rem"
         >
-          {data.map((ticket: any) => (
+          {/* {data.map((ticket: any) => (
             <PreviousBox
               key={ticket._id}
               status={ticket.status}
               number={ticket.number}
             />
-          ))}
+          ))} */}
         </Flex>
       </Box>
     </div>
