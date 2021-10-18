@@ -30,7 +30,7 @@ const StaffPage = () => {
 
   let UI;
   if (!Loading && QueryError) {
-    return (
+    UI = (
       <Alert
         status="error"
         variant="subtle"
