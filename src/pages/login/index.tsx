@@ -106,7 +106,7 @@ const Login = () => {
             boxSize="120px"
             src={LOGO}
             style={{ margin: Mobile420 ? "2.5rem 0" : "" }}
-            alt="Cauld And Clark"
+            alt="Marky Cute"
           />
 
           <Formik

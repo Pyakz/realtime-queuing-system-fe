@@ -11,17 +11,16 @@ import TransactionPage from "../pages/staff/transaction/TransactionPage";
 import Dashboard from "../pages/dashboard";
 import AdminStaffPage from "../pages/admin/staffs/StaffPage";
 import Pendings from "../pages/staff/counter/Pendings";
+import Landing from "../pages/landing";
 
 // import StaffPage from "../pages/staff";
 
 const RoutesComponent = () => {
   return (
     <Switch>
-      <PublicRoute restricted={true} exact path="/">
-        <Redirect to="/login" />
-      </PublicRoute>
-      <PublicRoute path="/counter"  component={CounterPage} exact />
-      <PublicRoute path="/pendings"  component={Pendings} exact />
+      <PublicRoute path="/" component={Landing} exact />
+      <PublicRoute path="/counter" component={CounterPage} exact />
+      <PublicRoute path="/pendings" component={Pendings} exact />
       <PublicRoute path="/login" restricted={true} component={Login} exact />
       <PrivateRoute
         path="/dashboard"

@@ -26,7 +26,7 @@ const PublicRoute = ({ component: Component, restricted, ...rest }: any) => {
     return <FullScreenSpinner />;
   } else {
     if (loggedIn && restricted) {
-      return <Redirect to="/dashboard" />;
+      return <Redirect to="/" />;
     } else {
       return (
         <Route
