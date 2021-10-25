@@ -1,4 +1,4 @@
-import { useQuery, useLazyQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import {
   Box,
   Text,
@@ -8,10 +8,14 @@ import {
   Alert,
   AlertIcon,
   AlertTitle,
+  useToast,
+  Spinner,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { isEmpty } from "lodash";
+import { Fragment, useEffect, useState } from "react";
 import CenterSpinner from "../../components/common/CenterSpinner";
 import StaffLayout from "../../layout/StaffLayout";
+import { CHANGE_STATUS } from "./transaction/__apolloMutation";
 import { CURRENT_QUEUES } from "./__apolloQueries";
 
 export enum STATUS_ENUM {
@@ -22,11 +26,22 @@ export enum STATUS_ENUM {
 }
 
 const StaffPage = () => {
+  const [next, setNext] = useState<any>();
+  const [current, setCurrent] = useState<any>();
+  const [previous, setPrevious] = useState<any>();
+
   const {
     data: Data,
     loading: Loading,
     error: QueryError,
   } = useQuery(CURRENT_QUEUES);
+  useEffect(() => {
+    if (!Loading && Data) {
+      setCurrent(Data?.currentQueueByUser?.current);
+      setNext(Data?.currentQueueByUser?.next);
+      setPrevious(Data?.currentQueueByUser?.previous);
+    }
+  }, [Loading, Data]);
 
   let UI;
   if (!Loading && QueryError) {
@@ -49,7 +64,19 @@ const StaffPage = () => {
   }
 
   if (!Loading && Data && Data?.currentQueueByUser) {
-    UI = <QueuesBody data={Data?.currentQueueByUser} />;
+    UI = (
+      <QueuesBody
+        data={Data?.currentQueueByUser}
+        states={{
+          next,
+          setNext,
+          current,
+          setCurrent,
+          previous,
+          setPrevious,
+        }}
+      />
+    );
   }
 
   if (Loading && !Data && !QueryError) {
@@ -75,10 +102,42 @@ type TPreviousBox = {
 };
 
 const QueuesBody = (props: any) => {
-  const { data } = props;
-  const currentNumber = data.current;
-  const nextNumber = data.next;
+  const { data, states } = props;
+  const [ChangeStatus, { data: Data, loading: Loading }] =
+    useMutation(CHANGE_STATUS);
+  const { next, current, setNext, setCurrent, setPrevious, previous } = states;
+  const toast = useToast();
+  useEffect(() => {
+    if (!Loading) {
+      setCurrent(Data?.updateQueueStatus?.current);
+      setNext(Data?.updateQueueStatus?.next);
+      setPrevious(Data?.updateQueueStatus?.previous);
+    }
+  }, [Loading, Data, setNext, setCurrent, setPrevious]);
 
+  const handleChangeStatus = async (type = "") => {
+    try {
+      if (isEmpty(data?.current)) {
+        await ChangeStatus({
+          variables: {
+            body: { id: data?.next?._id, status: STATUS_ENUM.PROCESSING },
+          },
+        });
+      } else {
+        await ChangeStatus({
+          variables: { body: { id: current._id, status: type } },
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error, Something Happened.",
+        description: error.message,
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
   return (
     <div className="parent">
       <div className="div1">
@@ -99,32 +158,38 @@ const QueuesBody = (props: any) => {
           </Text>
           <Box rounded="md" borderColor="orange" bg="orange" m="5" py="8">
             <Text fontSize="9xl" color="white" fontWeight="bold">
-              {currentNumber?.number}
+              {current?.number}
             </Text>
           </Box>
           <Flex justifyContent="center" p="3">
-            <Button
-              size="lg"
-              mx="2"
-              colorScheme="red"
-              w="100%"
-              onClick={() => {
-                console.table(currentNumber);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              size="lg"
-              mx="2"
-              colorScheme="green"
-              w="100%"
-              onClick={() => {
-                console.table(nextNumber);
-              }}
-            >
-              Next
-            </Button>
+            {Loading ? (
+              <Spinner />
+            ) : (
+              <Fragment>
+                <Button
+                  disabled={
+                    isEmpty(next) || isEmpty(data?.current) ? true : false
+                  }
+                  size="lg"
+                  mx="2"
+                  colorScheme="red"
+                  w="100%"
+                  onClick={() => handleChangeStatus(STATUS_ENUM.CANCELLED)}
+                >
+                  Cancel
+                </Button>
+
+                <Button
+                  size="lg"
+                  mx="2"
+                  colorScheme="green"
+                  w="100%"
+                  onClick={() => handleChangeStatus(STATUS_ENUM.COMPLETED)}
+                >
+                  Next
+                </Button>
+              </Fragment>
+            )}
           </Flex>
         </Box>
       </div>
@@ -149,13 +214,13 @@ const QueuesBody = (props: any) => {
           overflowY="scroll"
           height="28rem"
         >
-          {/* {data.map((ticket: any) => (
+          {previous?.map((ticket: any) => (
             <PreviousBox
               key={ticket._id}
-              status={ticket.status}
-              number={ticket.number}
+              status={ticket?.status}
+              number={ticket?.number}
             />
-          ))} */}
+          ))}
         </Flex>
       </Box>
     </div>
@@ -179,7 +244,15 @@ const PreviousBox = ({ status, number }: TPreviousBox) => {
 
       <Tag
         variant="solid"
-        colorScheme={status === "COMPLETED" ? "green" : "red"}
+        colorScheme={
+          status === STATUS_ENUM.COMPLETED
+            ? "green"
+            : status === STATUS_ENUM.CANCELLED
+            ? "red"
+            : status === STATUS_ENUM.PENDING
+            ? "orange"
+            : "blue"
+        }
       >
         {status}
       </Tag>

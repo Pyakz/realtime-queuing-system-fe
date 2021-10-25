@@ -38,7 +38,7 @@ const Pendings = () => {
     if (!Loading && Data && Data?.queues?.totalFiltered !== 0) {
       setQueues(Data?.queues?.results);
     }
-  }, [Data]);
+  }, [Data, Loading]);
 
   useEffect(() => {
     if (!NewPendingLoading) {
@@ -48,7 +48,7 @@ const Pendings = () => {
         return newQueue;
       });
     }
-  }, [data]);
+  }, [data, NewPendingLoading]);
 
   let UI;
 

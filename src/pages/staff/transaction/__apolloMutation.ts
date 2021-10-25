@@ -1,18 +1,18 @@
 import { gql } from "@apollo/client";
 
-const CURRENT_QUEUES = gql`
-  query Current {
-    currentQueueByUser {
+const CHANGE_STATUS = gql`
+  mutation changeStatusQueue($body: updateStatusQueue!) {
+    updateQueueStatus(body: $body) {
       previous {
         _id
         status
         number
       }
-      current {
+      next {
         _id
         number
       }
-      next {
+      current {
         _id
         number
       }
@@ -20,4 +20,4 @@ const CURRENT_QUEUES = gql`
   }
 `;
 
-export { CURRENT_QUEUES };
+export { CHANGE_STATUS };
