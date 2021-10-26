@@ -100,7 +100,7 @@ const QueuesTable = () => {
     { label: "Number", key: "number" },
     { label: "Status", key: "status" },
     { label: "Counter", key: "proccessed_at" },
-    { label: "Created", key: "created" },
+    { label: "Processed", key: "created" },
     { label: "Person", key: "person" },
   ];
 
