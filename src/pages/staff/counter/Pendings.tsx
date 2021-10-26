@@ -25,7 +25,7 @@ const Pendings = () => {
       query: {
         take: 18,
         status: "PENDING",
-        direction: "DESC",
+        direction: "ASC",
       },
     },
   });

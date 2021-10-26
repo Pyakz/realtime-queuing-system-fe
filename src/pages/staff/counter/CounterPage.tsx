@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useQuery, useSubscription } from "@apollo/client";
 import {
   Box,
   Text,
@@ -9,8 +9,11 @@ import {
   AlertIcon,
   AlertTitle,
 } from "@chakra-ui/react";
+import { useEffect } from "react";
+import { STATUS_ENUM } from "..";
 import CenterSpinner from "../../../components/common/CenterSpinner";
 import { FIND_MANY_QUEUES } from "../../admin/queues/_apolloQueries";
+import { NEW_PENDING } from "./__apolloSubscriptions";
 
 const CounterPage = () => {
   const [isMobile] = useMediaQuery("(max-width: 650px)");
@@ -18,15 +21,38 @@ const CounterPage = () => {
     data: Data,
     loading: Loading,
     error: QueryError,
+    refetch,
   } = useQuery(FIND_MANY_QUEUES, {
     variables: {
       query: {
-        take: 18,
-        status: "PROCESSING",
+        take: 10,
+        status: STATUS_ENUM.PROCESSING,
         direction: "DESC",
       },
     },
   });
+
+  const { data: NewProcessing, loading: NewProcessingLoading } =
+    useSubscription(NEW_PENDING, {
+      variables: { status: STATUS_ENUM.COMPLETED },
+    });
+  const { data: NewCancelled, loading: NewCancelledLoading } = useSubscription(
+    NEW_PENDING,
+    {
+      variables: { status: STATUS_ENUM.CANCELLED },
+    }
+  );
+  useEffect(() => {
+    if (!NewProcessingLoading || !NewCancelledLoading) {
+      refetch();
+    }
+  }, [
+    NewProcessing,
+    NewProcessingLoading,
+    NewCancelled,
+    NewCancelledLoading,
+    refetch,
+  ]);
 
   let UI;
 
@@ -50,7 +76,6 @@ const CounterPage = () => {
   }
 
   if (!Loading && Data && Data?.queues?.totalFiltered !== 0) {
-    console.log(Data?.queues?.results);
     UI = (
       <Grid templateColumns={`repeat(${isMobile ? "1" : "2"}, 1fr)`} gap={5}>
         {Data?.queues?.results.map((queue: any) => (
