@@ -78,7 +78,7 @@ const QueuesTable = () => {
         number: rowData.number,
         status: rowData.status,
         proccessed_at: rowData.processedBy.counterNumber,
-        created: rowData.createdAt,
+        created: moment(rowData.createdAt).format("M/D/YYYY, h:mm:ss a"),
         person: rowData.person.name,
       };
     });
