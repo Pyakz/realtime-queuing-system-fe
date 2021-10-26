@@ -20,6 +20,7 @@ const Pendings = () => {
     data: Data,
     loading: Loading,
     error: QueryError,
+    refetch,
   } = useQuery(FIND_MANY_QUEUES, {
     variables: {
       query: {
@@ -33,6 +34,21 @@ const Pendings = () => {
   const { data, loading: NewPendingLoading } = useSubscription(NEW_PENDING, {
     variables: { status: "PENDING" },
   });
+  const { data: NewCompleted, loading: NewCompletedLoading } = useSubscription(
+    NEW_PENDING,
+    {
+      variables: { status: "COMPLETED" },
+    }
+  );
+  const { data: NewCancelled, loading: NewCancelledLoading } = useSubscription(
+    NEW_PENDING,
+    {
+      variables: { status: "CANCELLED" },
+    }
+  );
+  useEffect(() => {
+    refetch();
+  }, [NewCompleted, NewCompletedLoading, NewCancelled, NewCancelledLoading]);
 
   useEffect(() => {
     if (!Loading && Data && Data?.queues?.totalFiltered !== 0) {
