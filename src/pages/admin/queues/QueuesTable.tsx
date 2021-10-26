@@ -14,6 +14,7 @@ import {
   AlertIcon,
   AlertTitle,
   Select,
+  useDisclosure,
 } from "@chakra-ui/react";
 import moment from "moment";
 import { useState } from "react";
@@ -22,6 +23,8 @@ import Pagination from "../../../components/Pagination";
 import PerPage from "../../../components/Perpage";
 import THeader from "../../../components/TableHeader";
 import { FIND_MANY_QUEUES } from "./_apolloQueries";
+import { CSVLink } from "react-csv";
+import InfoQueues from "./InfoQueues";
 
 const QueuesTable = () => {
   const [isMobile] = useMediaQuery("(max-width: 599px)");
@@ -64,11 +67,21 @@ const QueuesTable = () => {
       </Alert>
     );
   }
-
+  let rowCSV: any = [];
   if (!Loading && Data && Data?.queues?.totalFiltered !== 0) {
     UI = Data?.queues?.results?.map((rowData: any) => (
       <Row rowData={rowData} key={rowData._id} />
     ));
+
+    rowCSV = Data?.queues?.results?.map((rowData: any) => {
+      return {
+        number: rowData.number,
+        status: rowData.status,
+        proccessed_at: rowData.processedBy.counterNumber,
+        created: rowData.createdAt,
+        person: rowData.person.name,
+      };
+    });
   }
 
   if (!Loading && Data && Data?.queues?.totalFiltered === 0) {
@@ -82,12 +95,27 @@ const QueuesTable = () => {
   if (Loading && !Data && !QueryError) {
     UI = <CenterSpinner />;
   }
+
+  const headers = [
+    { label: "Number", key: "number" },
+    { label: "Status", key: "status" },
+    { label: "Counter", key: "proccessed_at" },
+    { label: "Created", key: "created" },
+    { label: "Person", key: "person" },
+  ];
+
   return (
     <Box pb={5} p={1}>
       <Flex mb="3" p="1" justifyContent="space-between" alignItems="center">
         <Flex justifyContent="center">
           <Button colorScheme="gray" size="md" rounded="sm">
-            Download
+            <CSVLink
+              data={rowCSV}
+              headers={headers}
+              filename={`queues-${moment().format("MMM-D-YYYY")}`}
+            >
+              Download
+            </CSVLink>
           </Button>
         </Flex>
 
@@ -137,6 +165,19 @@ export default QueuesTable;
 export const Row = ({ rowData }: any) => {
   const [isMobile] = useMediaQuery("(max-width: 699px)");
   const BG = useColorModeValue("white", "gray.700");
+
+  const [selectedQueue, setSelectedQueue] = useState<string>();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [open, setOpen] = useState<boolean>();
+
+  const handleClick = (id: string) => {
+    setSelectedQueue(id);
+    setOpen(true);
+    setTimeout(() => {
+      onOpen();
+    }, 100);
+  };
   return (
     <SimpleGrid
       columns={[5, 5, 5]}
@@ -149,9 +190,16 @@ export const Row = ({ rowData }: any) => {
       w={isMobile ? "50rem" : "100%"}
       pl={isMobile ? "3" : "0"}
     >
+      {open && (
+        <InfoQueues
+          isOpen={isOpen}
+          onClose={onClose}
+          selectedQueue={selectedQueue}
+        />
+      )}
       <Flex alignItems="center" justifyContent="start">
-        <Checkbox colorScheme="blue" mx="2" />
-        <Text fontSize="xl" fontStyle="bold">
+        {/* <Checkbox colorScheme="blue" mx="2" /> */}
+        <Text fontSize="xl" fontStyle="bold" ml="2">
           {rowData?.number}
         </Text>
       </Flex>
@@ -212,7 +260,7 @@ export const Row = ({ rowData }: any) => {
         <Button
           mx="1"
           leftIcon={<EditIcon />}
-          onClick={() => alert(rowData?._id)}
+          onClick={() => handleClick(rowData?._id)}
           colorScheme="blue"
           size="sm"
           my={isMobile ? 2 : 0}

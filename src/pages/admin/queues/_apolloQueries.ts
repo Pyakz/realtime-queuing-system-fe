@@ -23,5 +23,21 @@ const FIND_MANY_QUEUES = gql`
     }
   }
 `;
-
-export { FIND_MANY_QUEUES };
+const FIND_QUEUE = gql`
+  query queue($id: String!) {
+    queue(id: $id) {
+      _id
+      number
+      person {
+        name
+        number
+        address
+      }
+      processedAt
+      processedBy {
+        counterNumber
+      }
+    }
+  }
+`;
+export { FIND_MANY_QUEUES, FIND_QUEUE };

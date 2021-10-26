@@ -22,9 +22,9 @@ const TableHeader = ({ names }: any) => {
     >
       {names.map((name: string, index: number) => (
         <Flex key={name}>
-          {index === 0 && <Checkbox colorScheme="blue" mr="2" />}
+          {/* {index === 0 && <Checkbox colorScheme="blue" mr="2" />} */}
 
-          <Text fontSize="md" fontWeight="bold">
+          <Text fontSize="md" fontWeight="bold" ml="2">
             {name}
           </Text>
         </Flex>

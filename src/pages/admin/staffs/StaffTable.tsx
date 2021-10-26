@@ -16,13 +16,15 @@ import {
   useColorModeValue,
   useMediaQuery,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import moment from "moment";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import CenterSpinner from "../../../components/common/CenterSpinner";
 import Pagination from "../../../components/Pagination";
 import PerPage from "../../../components/Perpage";
 import THeader from "../../../components/TableHeader";
+import InfoDrawer from "./InfoDrawer";
 import { FIND_MANY_USERS } from "./_apolloQueries";
 
 export enum ROLE_ENUM {
@@ -92,11 +94,7 @@ const StaffTable = () => {
   return (
     <Box pb={5} p={1}>
       <Flex mb="3" p="1" justifyContent="space-between" alignItems="center">
-        <Flex justifyContent="center">
-          <Button colorScheme="gray" size="md" rounded="sm">
-            Download
-          </Button>
-        </Flex>
+        <Flex justifyContent="center" />
 
         <Flex justifyContent="center">
           <InputGroup w="15rem" justifySelf="flex-end" mx="2">
@@ -137,8 +135,20 @@ const StaffTable = () => {
 export default StaffTable;
 
 export const Row = ({ rowData }: any) => {
+  const [selectedStaff, setSelectedStaff] = useState<string>();
+  const [open, setOpen] = useState<boolean>();
+
   const [isMobile] = useMediaQuery("(max-width: 699px)");
   const BG = useColorModeValue("white", "gray.700");
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleClick = (id: string) => {
+    setSelectedStaff(id);
+    setOpen(true);
+    setTimeout(() => {
+      onOpen();
+    }, 100);
+  };
   return (
     <SimpleGrid
       columns={[4, 4, 4]}
@@ -151,9 +161,17 @@ export const Row = ({ rowData }: any) => {
       w={isMobile ? "50rem" : "100%"}
       pl={isMobile ? "3" : "0"}
     >
+      {open && (
+        <InfoDrawer
+          isOpen={isOpen}
+          onClose={onClose}
+          selectedStaff={selectedStaff}
+        />
+      )}
+
       <Flex alignItems="center" justifyContent="start">
-        <Checkbox colorScheme="blue" mx="2" />
-        <Text fontSize="xl" fontStyle="bold">
+        {/* <Checkbox colorScheme="blue" mx="2" /> */}
+        <Text fontSize="xl" fontStyle="bold" ml="2">
           {rowData?.username}
         </Text>
       </Flex>
@@ -221,10 +239,10 @@ export const Row = ({ rowData }: any) => {
         <Button
           mx="1"
           leftIcon={<EditIcon />}
-          onClick={() => alert(rowData?._id)}
           colorScheme="blue"
           size="sm"
           my={isMobile ? 2 : 0}
+          onClick={() => handleClick(rowData?._id)}
         >
           View
         </Button>

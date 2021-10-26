@@ -18,4 +18,15 @@ const FIND_MANY_USERS = gql`
   }
 `;
 
-export { FIND_MANY_USERS };
+const FIND_USER = gql`
+  query user($id: String!) {
+    user(id: $id) {
+      _id
+      username
+      counterNumber
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export { FIND_MANY_USERS, FIND_USER };

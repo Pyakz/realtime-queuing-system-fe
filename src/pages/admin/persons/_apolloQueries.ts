@@ -22,5 +22,19 @@ const FIND_MANY_PERSON = gql`
     }
   }
 `;
-
-export { FIND_MANY_PERSON };
+const FIND_PERSON = gql`
+  query person($id: String!) {
+    person(id: $id) {
+      _id
+      name
+      address
+      cellphoneNumber
+      processedAt
+      processedBy {
+        username
+        counterNumber
+      }
+    }
+  }
+`;
+export { FIND_MANY_PERSON, FIND_PERSON };

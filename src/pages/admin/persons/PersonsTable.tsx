@@ -16,6 +16,7 @@ import {
   useMediaQuery,
   Checkbox,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import moment from "moment";
 import { useState } from "react";
@@ -24,6 +25,8 @@ import Pagination from "../../../components/Pagination";
 import PerPage from "../../../components/Perpage";
 import TableHeader from "../../../components/TableHeader";
 import { FIND_MANY_PERSON } from "./_apolloQueries";
+import { CSVLink } from "react-csv";
+import InfoPersons from "./InfoPersons";
 
 const PersonsTable = () => {
   const [isMobile] = useMediaQuery("(max-width: 599px)");
@@ -64,11 +67,19 @@ const PersonsTable = () => {
       </Alert>
     );
   }
-
+  let rowCSV = [];
   if (!Loading && Data && Data?.persons?.totalFiltered !== 0) {
     UI = Data?.persons?.results?.map((rowData: any) => (
       <Row rowData={rowData} key={rowData._id} />
     ));
+    rowCSV = Data?.persons?.results?.map((person: any) => {
+      return {
+        name: person.name,
+        address: person.address,
+        phone: person.cellphoneNumber,
+        counter: person.processedBy.counterNumber,
+      };
+    });
   }
 
   if (Loading && !Data && !QueryError) {
@@ -83,12 +94,25 @@ const PersonsTable = () => {
     );
   }
 
+  const headers = [
+    { label: "Name", key: "name" },
+    { label: "Address", key: "address" },
+    { label: "Phone", key: "phone" },
+    { label: "Counter", key: "counter" },
+  ];
+
   return (
     <Box pb={5} p={1}>
       <Flex mb="3" p="1" justifyContent="space-between" alignItems="center">
         <Flex justifyContent="center">
           <Button colorScheme="gray" size="md" rounded="sm">
-            Download
+            <CSVLink
+              data={rowCSV}
+              headers={headers}
+              filename={`persons-${moment().format("MMM-D-YYYY")}`}
+            >
+              Download
+            </CSVLink>
           </Button>
         </Flex>
 
@@ -137,6 +161,20 @@ export default PersonsTable;
 export const Row = ({ rowData }: any) => {
   const [isMobile] = useMediaQuery("(max-width: 699px)");
   const BG = useColorModeValue("white", "gray.700");
+
+  const [selectedPerson, setSelectedPerson] = useState<string>();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [open, setOpen] = useState<boolean>();
+
+  const handleClick = (id: string) => {
+    setSelectedPerson(id);
+    setOpen(true);
+    setTimeout(() => {
+      onOpen();
+    }, 100);
+  };
+
   return (
     <SimpleGrid
       columns={[4, 4, 4]}
@@ -149,9 +187,16 @@ export const Row = ({ rowData }: any) => {
       w={isMobile ? "50rem" : "100%"}
       pl={isMobile ? "3" : "0"}
     >
+      {open && (
+        <InfoPersons
+          isOpen={isOpen}
+          onClose={onClose}
+          selectedPerson={selectedPerson}
+        />
+      )}
       <Flex alignItems="center" justifyContent="start">
-        <Checkbox colorScheme="blue" mx="2" />
-        <Text fontSize="xl" fontStyle="bold">
+        {/* <Checkbox colorScheme="blue" mx="2" /> */}
+        <Text fontSize="xl" fontStyle="bold" ml="2">
           {rowData?.name}
         </Text>
       </Flex>
@@ -209,7 +254,7 @@ export const Row = ({ rowData }: any) => {
         <Button
           mx="1"
           leftIcon={<EditIcon />}
-          onClick={() => alert(rowData?._id)}
+          onClick={() => handleClick(rowData?._id)}
           colorScheme="blue"
           size="sm"
           my={isMobile ? 2 : 0}
