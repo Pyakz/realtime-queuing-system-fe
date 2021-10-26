@@ -13,7 +13,8 @@ import { onError } from "@apollo/client/link/error";
 import { RetryLink } from "@apollo/client/link/retry";
 import { getAuthToken } from "./token";
 // import { get, isEmpty } from "lodash";
-
+const isProd = process.env.NODE_ENV === "production";
+console.log(isProd);
 const BASE_URL = "localhost:8080";
 const PROD_URL = "realtime-queue.herokuapp.com";
 const http = process.env.NODE_ENV === "production" ? "https" : "http";
@@ -48,7 +49,9 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 const websocketLink = new WebSocketLink({
-  uri: `ws://${process.env.NODE_ENV ? PROD_URL : BASE_URL}/graphql`,
+  uri: `ws${isProd ? "s" : ""}://${
+    process.env.NODE_ENV ? PROD_URL : BASE_URL
+  }/graphql`,
   options: {
     reconnect: true,
     lazy: true,
