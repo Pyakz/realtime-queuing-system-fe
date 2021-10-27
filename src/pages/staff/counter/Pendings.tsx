@@ -6,6 +6,7 @@ import {
   Flex,
   Grid,
   Text,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { FIND_MANY_QUEUES } from "../../admin/queues/_apolloQueries";
 
@@ -89,11 +90,16 @@ const Pendings = () => {
 
   if (!Loading && Data && Data?.queues?.totalFiltered !== 0) {
     UI = (
-      <Grid templateColumns="repeat(6, 1fr)" gap={2}>
+      <Flex
+        mx="auto"
+        flexWrap="wrap"
+        justifyContent="center"
+        alignItems="flex-start"
+      >
         {queues.map((queue: any) => (
           <PendingQueue number={queue.number} key={queue._id} />
         ))}
-      </Grid>
+      </Flex>
     );
   }
 
@@ -121,6 +127,8 @@ const Pendings = () => {
 
 const PendingQueue = (props: any) => {
   const { number } = props;
+  const [isLargerThan600] = useMediaQuery("(min-width: 600px)");
+
   return (
     <Box
       m="2"
@@ -130,8 +138,13 @@ const PendingQueue = (props: any) => {
       px="7"
       shadow="xs"
       textAlign="center"
+      width={isLargerThan600 ? "14rem" : "7rem"}
     >
-      <Text fontSize="7xl" fontWeight="bold" color="gray.600">
+      <Text
+        fontSize={isLargerThan600 ? "7xl" : "2xl"}
+        fontWeight="bold"
+        color="gray.600"
+      >
         {number}
       </Text>
     </Box>

@@ -22,7 +22,7 @@ const Landing = () => {
           alignItems="center"
           justifyContent="center"
         >
-          <Link to="login">
+          <Link to="login" target="_blank" rel="noopener noreferrer">
             <Text fontSize="5xl" textAlign="center" fontWeight="bold">
               LOGIN
             </Text>
@@ -39,7 +39,7 @@ const Landing = () => {
           alignItems="center"
           justifyContent="center"
         >
-          <Link to="counter">
+          <Link to="counter" target="_blank" rel="noopener noreferrer">
             <Text fontSize="5xl" textAlign="center" fontWeight="bold">
               COUNTER
             </Text>
@@ -56,7 +56,7 @@ const Landing = () => {
           alignItems="center"
           justifyContent="center"
         >
-          <Link to="pendings">
+          <Link to="pendings" target="_blank" rel="noopener noreferrer">
             <Text fontSize="5xl" textAlign="center" fontWeight="bold">
               PENDINGS
             </Text>
