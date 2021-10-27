@@ -33,12 +33,15 @@ const Scanner = () => {
       setResult(scannedData);
       setDelay(3000);
     } else {
-      toast({
-        description: "Invalid QR Code",
-        status: "warning",
-        duration: 1000,
-        isClosable: true,
-      });
+      if (!toast.isActive("active-toast")) {
+        toast({
+          id: "active-toast",
+          description: "Invalid QR Code",
+          status: "warning",
+          duration: 1000,
+          isClosable: true,
+        });
+      }
       setIsValid(false);
     }
   };

@@ -24,7 +24,6 @@ const RoutesComponent = () => {
       </PublicRoute> */}
 
       <PublicRoute path="/" component={Landing} exact />
-
       <PublicRoute path="/counter" component={CounterPage} exact />
       <PublicRoute path="/pendings" component={Pendings} exact />
       <PublicRoute path="/login" component={Login} exact />
