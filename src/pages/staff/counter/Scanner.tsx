@@ -5,6 +5,8 @@ import { Box, useToast, Button, Flex, Text } from "@chakra-ui/react";
 import { isEmpty } from "lodash";
 import { useMutation } from "@apollo/client";
 import { CREATE_QUEUE } from "./__apolloMutations";
+import { removeAuthToken } from "../../../utils/token";
+import { useHistory } from "react-router";
 
 type Scanned = {
   name: string;
@@ -14,7 +16,7 @@ type Scanned = {
 const Scanner = () => {
   const [delay, setDelay] = useState<number>();
   const [isValid, setIsValid] = useState<boolean>();
-
+  const history = useHistory();
   const [createQueue, { loading: Loading }] = useMutation(CREATE_QUEUE);
 
   const [result, setResult] = useState<Scanned>();
@@ -31,6 +33,12 @@ const Scanner = () => {
       setResult(scannedData);
       setDelay(3000);
     } else {
+      toast({
+        description: "Invalid QR Code",
+        status: "warning",
+        duration: 1000,
+        isClosable: true,
+      });
       setIsValid(false);
     }
   };
@@ -70,16 +78,15 @@ const Scanner = () => {
     }
   };
   return (
-    <div style={{ height: "70vh" }}>
+    <Flex flexDirection="column" justifyContent="center" alignItems="center">
       {!isValid && (
         <QrReader
           delay={delay}
           onError={handleError}
           onScan={handleScan}
-          style={{ width: "100%", height: "100%" }}
+          style={{ width: "100%", height: "50%" }}
         />
       )}
-
       {isValid ? (
         <Flex p={3} justifyContent="center" alignItems="center" height="50vh">
           <Box p={2}>
@@ -95,7 +102,7 @@ const Scanner = () => {
           </Text>
         </Flex>
       )}
-      {isValid && (
+      {isValid ? (
         <Flex p={3} justifyContent="center">
           <Button onClick={() => setIsValid(false)} colorScheme="red" mx="2">
             Cancel
@@ -109,8 +116,22 @@ const Scanner = () => {
             Create
           </Button>
         </Flex>
+      ) : (
+        <Flex w="100%" mt="8" justifyContent="center">
+          <Button
+            onClick={() => {
+              removeAuthToken();
+              history.push("/login");
+            }}
+            colorScheme="blue"
+            m="3"
+            rounded="full"
+          >
+            Logout
+          </Button>
+        </Flex>
       )}
-    </div>
+    </Flex>
   );
 };
 

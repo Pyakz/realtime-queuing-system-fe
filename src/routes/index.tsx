@@ -1,4 +1,4 @@
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import PageNotFound from "../pages/errors/PageNotFound";
 import Login from "../pages/login";
 import PersonsPage from "../pages/admin/persons/PersonsPage";
@@ -19,16 +19,20 @@ import Scanner from "../pages/staff/counter/Scanner";
 const RoutesComponent = () => {
   return (
     <Switch>
+      {/* <PublicRoute restricted={true} exact path="/">
+        <Redirect to="/" />
+      </PublicRoute> */}
+
       <PublicRoute path="/" component={Landing} exact />
+
       <PublicRoute path="/counter" component={CounterPage} exact />
       <PublicRoute path="/pendings" component={Pendings} exact />
       <PublicRoute path="/login" component={Login} exact />
-      <PrivateRoute path="/scanner" component={Scanner} role={["SCANNER"]} />
 
       <PrivateRoute
         path="/dashboard"
         component={Dashboard}
-        role={["ADMIN", "STAFF"]}
+        role={["ADMIN", "STAFF", "SCANNER"]}
       />
       <PrivateRoute path="/queues" component={Queues} role={["ADMIN"]} />
       <PrivateRoute path="/persons" component={PersonsPage} role={["ADMIN"]} />
