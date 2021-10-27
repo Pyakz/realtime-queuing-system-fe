@@ -7,7 +7,7 @@ const Dashboard = () => {
   const { auth } = useAuth();
   return auth.role === "ADMIN" ? (
     <AdminPage />
-  ) : auth.role === "ADMIN" ? (
+  ) : auth.role === "STAFF" ? (
     <StaffPage />
   ) : (
     <Scanner />
