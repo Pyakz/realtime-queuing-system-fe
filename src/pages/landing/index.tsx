@@ -62,6 +62,23 @@ const Landing = () => {
             </Text>
           </Link>
         </Box>
+        <Box
+          className="landing_div4"
+          p="4"
+          bg="gray.100"
+          shadow="sm"
+          m="2"
+          rounded="md"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Link to="scanner">
+            <Text fontSize="5xl" textAlign="center" fontWeight="bold">
+              SCANNER
+            </Text>
+          </Link>
+        </Box>
       </Box>
     </Flex>
   );

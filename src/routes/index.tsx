@@ -12,6 +12,7 @@ import Dashboard from "../pages/dashboard";
 import AdminStaffPage from "../pages/admin/staffs/StaffPage";
 import Pendings from "../pages/staff/counter/Pendings";
 import Landing from "../pages/landing";
+import Scanner from "../pages/staff/counter/Scanner";
 
 // import StaffPage from "../pages/staff";
 
@@ -22,6 +23,8 @@ const RoutesComponent = () => {
       <PublicRoute path="/counter" component={CounterPage} exact />
       <PublicRoute path="/pendings" component={Pendings} exact />
       <PublicRoute path="/login" component={Login} exact />
+      <PrivateRoute path="/scanner" component={Scanner} role={["SCANNER"]} />
+
       <PrivateRoute
         path="/dashboard"
         component={Dashboard}
