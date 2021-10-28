@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import QrReader from "react-qr-reader";
 
 import {
@@ -8,6 +8,7 @@ import {
   Flex,
   Text,
   useMediaQuery,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { isEmpty } from "lodash";
 import { useMutation } from "@apollo/client";
@@ -92,7 +93,7 @@ const Scanner = () => {
       });
     }
   };
-
+  const colorClose = useColorModeValue("orange", "gray");
   if (isLargerThan600) {
     return (
       <Flex p={3} justifyContent="center" alignItems="center" height="90vh">
@@ -127,7 +128,11 @@ const Scanner = () => {
       )}
       {isOpen ? (
         <Flex p={3} justifyContent="center">
-          <Button onClick={() => setOpen(false)} colorScheme="red" mx="2">
+          <Button
+            onClick={() => setOpen(false)}
+            colorScheme={colorClose}
+            mx="2"
+          >
             Cancel
           </Button>
           <Button
@@ -143,7 +148,7 @@ const Scanner = () => {
         <Flex w="100%" mt="8" justifyContent="center">
           <Button
             onClick={() => setOpen((prev) => !prev)}
-            colorScheme="orange"
+            colorScheme={colorClose}
             m="3"
             rounded="full"
           >

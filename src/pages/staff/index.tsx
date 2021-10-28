@@ -9,7 +9,7 @@ import {
   AlertIcon,
   AlertTitle,
   useToast,
-  Spinner,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { isEmpty } from "lodash";
 import { Fragment, useEffect, useState } from "react";
@@ -147,49 +147,60 @@ const QueuesBody = (props: any) => {
           shadow="sm"
           rounded="md"
           textAlign="center"
-          bg="gray.100"
+          bg={useColorModeValue("gray.100", "gray.700")}
           mt="4"
         >
-          <Text fontSize="2xl" color="orange" my="4">
+          <Text
+            fontSize="2xl"
+            color={useColorModeValue("orange", "white")}
+            my="4"
+          >
             Current Serving
           </Text>
-          <Text fontSize="3xl" color="gray" my="4">
+          <Text
+            fontSize="3xl"
+            color={useColorModeValue("gray", "white")}
+            my="4"
+          >
             Ticket Number
           </Text>
-          <Box rounded="md" borderColor="orange" bg="orange" m="5" py="8">
+          <Box
+            rounded="md"
+            bg={useColorModeValue("orange", "gray.600")}
+            m="5"
+            py="8"
+          >
             <Text fontSize="9xl" color="white" fontWeight="bold">
               {current?.number}
             </Text>
           </Box>
           <Flex justifyContent="center" p="3">
-            {Loading ? (
-              <Spinner />
-            ) : (
-              <Fragment>
-                <Button
-                  disabled={
-                    isEmpty(next) || isEmpty(data?.current) ? true : false
-                  }
-                  size="lg"
-                  mx="2"
-                  colorScheme="red"
-                  w="100%"
-                  onClick={() => handleChangeStatus(STATUS_ENUM.CANCELLED)}
-                >
-                  Cancel
-                </Button>
+            <Fragment>
+              <Button
+                disabled={
+                  isEmpty(next) || isEmpty(data?.current) ? true : false
+                }
+                size="lg"
+                mx="2"
+                colorScheme={useColorModeValue("red", "gray")}
+                w="100%"
+                onClick={() => handleChangeStatus(STATUS_ENUM.CANCELLED)}
+                isLoading={Loading}
+              >
+                Cancel
+              </Button>
 
-                <Button
-                  size="lg"
-                  mx="2"
-                  colorScheme="green"
-                  w="100%"
-                  onClick={() => handleChangeStatus(STATUS_ENUM.COMPLETED)}
-                >
-                  Next
-                </Button>
-              </Fragment>
-            )}
+              <Button
+                size="lg"
+                mx="2"
+                colorScheme={useColorModeValue("green", "blue")}
+                w="100%"
+                onClick={() => handleChangeStatus(STATUS_ENUM.COMPLETED)}
+                isLoading={Loading}
+              >
+                Next
+              </Button>
+            </Fragment>
           </Flex>
         </Box>
       </div>
@@ -201,7 +212,7 @@ const QueuesBody = (props: any) => {
           color="gray.500"
           fontWeight="bold"
           shadow="sm"
-          bg="gray.300"
+          bg={useColorModeValue("gray.300", "gray.700")}
           rounded="md"
         >
           Previous Tickets
@@ -232,13 +243,17 @@ const PreviousBox = ({ status, number }: TPreviousBox) => {
       p="3"
       mx="3"
       mt="2"
-      bg="gray.200"
+      bg={useColorModeValue("gray.200", "gray.700")}
       rounded="md"
       shadow="sm"
       flexDirection="row"
       justifyContent="space-between"
     >
-      <Text fontSize="1xl" color="gray.500" fontWeight="bold">
+      <Text
+        fontSize="1xl"
+        color={useColorModeValue("gray.500", "gray.200")}
+        fontWeight="bold"
+      >
         #{number}
       </Text>
 

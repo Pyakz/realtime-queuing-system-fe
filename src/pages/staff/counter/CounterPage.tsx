@@ -8,7 +8,9 @@ import {
   Alert,
   AlertIcon,
   AlertTitle,
+  useColorModeValue,
 } from "@chakra-ui/react";
+import { sortBy } from "lodash";
 import { useEffect } from "react";
 import { STATUS_ENUM } from "..";
 import CenterSpinner from "../../../components/common/CenterSpinner";
@@ -76,9 +78,12 @@ const CounterPage = () => {
   }
 
   if (!Loading && Data && Data?.queues?.totalFiltered !== 0) {
+    const chronologicalData = sortBy(Data?.queues?.results, [
+      "processedBy.counterNumber",
+    ]);
     UI = (
       <Grid templateColumns={`repeat(${isMobile ? "1" : "2"}, 1fr)`} gap={5}>
-        {Data?.queues?.results.map((queue: any) => (
+        {chronologicalData.map((queue: any) => (
           <Queue
             number={queue.number}
             key={queue._id}
@@ -133,11 +138,11 @@ const Queue = (props: any) => {
         </Text>
       </Box>
 
-      <Box rounded="sm" p="2" px="7" m="2" borderBottom="5px solid">
+      <Box rounded="sm" p="2" px="7" m="2" borderBottom={`5px solid black `}>
         <Text
           fontSize={isMobile ? "1xl" : "2xl"}
           fontWeight="bold"
-          color="gray.600 "
+          color="gray.600"
         >
           Counter {counter}
         </Text>

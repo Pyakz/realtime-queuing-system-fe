@@ -25,7 +25,7 @@ const Pendings = () => {
   } = useQuery(FIND_MANY_QUEUES, {
     variables: {
       query: {
-        take: 18,
+        take: 20,
         status: "PENDING",
         direction: "ASC",
       },
@@ -59,10 +59,11 @@ const Pendings = () => {
 
   useEffect(() => {
     if (!NewPendingLoading) {
+      console.log(data);
       setQueues((prev: any) => {
-        const newQueue = [data.newQueue, ...prev];
-        newQueue.pop();
-        return newQueue;
+        const newQueue = [...prev];
+        newQueue.push(data.newQueue);
+        return newQueue.slice(0, 20);
       });
     }
   }, [data, NewPendingLoading]);
@@ -96,8 +97,8 @@ const Pendings = () => {
         justifyContent="center"
         alignItems="flex-start"
       >
-        {queues.map((queue: any) => (
-          <PendingQueue number={queue.number} key={queue._id} />
+        {queues.map((queue: any, index: number) => (
+          <PendingQueue index={index} number={queue.number} key={queue._id} />
         ))}
       </Flex>
     );
@@ -126,24 +127,25 @@ const Pendings = () => {
 };
 
 const PendingQueue = (props: any) => {
-  const { number } = props;
+  const { number, index } = props;
   const [isLargerThan600] = useMediaQuery("(min-width: 600px)");
+  const firstRow = index < 5;
 
   return (
     <Box
       m="2"
-      bg="gray.400"
+      bg={firstRow ? "blue.400" : "gray.400"}
       rounded="sm"
       p="2"
       px="7"
-      shadow="xs"
+      shadow={firstRow ? "lg" : "xs"}
       textAlign="center"
       width={isLargerThan600 ? "14rem" : "7rem"}
     >
       <Text
         fontSize={isLargerThan600 ? "7xl" : "2xl"}
         fontWeight="bold"
-        color="gray.600"
+        color={firstRow ? "white" : "gray.600"}
       >
         {number}
       </Text>

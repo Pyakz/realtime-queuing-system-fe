@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 const Landing = () => {
@@ -8,13 +8,13 @@ const Landing = () => {
       alignItems="center"
       height="100vh"
       flexDirection="column"
-      bg="gray.200"
+      bg={useColorModeValue("white", "gray.900")}
     >
       <Box className="landing" p="2" m="2">
         <Box
           className="landing_div1"
           p="4"
-          bg="gray.100"
+          bg={useColorModeValue("gray.200", "gray.500")}
           shadow="sm"
           m="2"
           rounded="md"
@@ -31,7 +31,7 @@ const Landing = () => {
         <Box
           className="landing_div2"
           p="4"
-          bg="gray.100"
+          bg={useColorModeValue("gray.200", "gray.500")}
           shadow="sm"
           m="2"
           rounded="md"
@@ -48,7 +48,7 @@ const Landing = () => {
         <Box
           className="landing_div3"
           p="4"
-          bg="gray.100"
+          bg={useColorModeValue("gray.200", "gray.500")}
           shadow="sm"
           m="2"
           rounded="md"
