@@ -7,7 +7,6 @@ import {
   Text,
   SimpleGrid,
   Tag,
-  Checkbox,
   useMediaQuery,
   useColorModeValue,
   Alert,

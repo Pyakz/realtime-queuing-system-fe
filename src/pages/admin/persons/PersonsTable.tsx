@@ -14,7 +14,6 @@ import {
   Tag,
   useColorModeValue,
   useMediaQuery,
-  Checkbox,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";

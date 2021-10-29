@@ -24,7 +24,7 @@ import { Formik, Form, Field } from "formik";
 import { useMutation } from "@apollo/client";
 import { LOGIN } from "./_apolloMutations";
 import { setAuthToken } from "../../utils/token";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link as NavLink } from "react-router-dom";
 import * as Yup from "yup";
 
 const LOGO = "https://banguismv.me/img/Kobe.png";
@@ -230,10 +230,43 @@ const Login = () => {
             href="https://www.linkedin.com/in/banguismv/"
             target="_blank"
           >
-            {" "}
             Mark Vergel Banguis
           </Link>
         </Text>
+
+        <Flex mt="2" justifyContent="space-between">
+          <Button
+            to="pendings"
+            target="_blank"
+            rel="noopener noreferrer"
+            bg={ButtonColor}
+            _hover={{
+              bg: "blue.700",
+            }}
+            mr="1"
+            w="full"
+            as={NavLink}
+            color="white"
+          >
+            Pendings
+          </Button>
+
+          <Button
+            target="_blank"
+            rel="noopener noreferrer"
+            to="counter"
+            bg={ButtonColor}
+            _hover={{
+              bg: "blue.700",
+            }}
+            ml="1"
+            w="full"
+            as={NavLink}
+            color="white"
+          >
+            Counter
+          </Button>
+        </Flex>
       </Box>
     </Flex>
   );

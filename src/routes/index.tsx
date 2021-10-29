@@ -5,25 +5,19 @@ import PersonsPage from "../pages/admin/persons/PersonsPage";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import Queues from "../pages/admin/queues/QueuesPage";
-
 import CounterPage from "../pages/staff/counter/CounterPage";
 import TransactionPage from "../pages/staff/transaction/TransactionPage";
 import Dashboard from "../pages/dashboard";
 import AdminStaffPage from "../pages/admin/staffs/StaffPage";
 import Pendings from "../pages/staff/counter/Pendings";
-import Landing from "../pages/landing";
-import Scanner from "../pages/staff/counter/Scanner";
-
-// import StaffPage from "../pages/staff";
 
 const RoutesComponent = () => {
   return (
     <Switch>
-      {/* <PublicRoute restricted={true} exact path="/">
-        <Redirect to="/" />
-      </PublicRoute> */}
+      <PublicRoute restricted={true} exact path="/">
+        <Redirect to="/login" />
+      </PublicRoute>
 
-      <PublicRoute path="/" component={Landing} exact />
       <PublicRoute path="/counter" component={CounterPage} exact />
       <PublicRoute path="/pendings" component={Pendings} exact />
       <PublicRoute path="/login" component={Login} exact />

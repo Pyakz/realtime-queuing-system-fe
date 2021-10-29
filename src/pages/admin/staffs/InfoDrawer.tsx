@@ -1,5 +1,4 @@
 import { useQuery } from "@apollo/client";
-import { Button } from "@chakra-ui/button";
 import { Input } from "@chakra-ui/input";
 import {
   Drawer,
@@ -8,7 +7,6 @@ import {
   DrawerCloseButton,
   DrawerHeader,
   DrawerBody,
-  DrawerFooter,
 } from "@chakra-ui/modal";
 import { Spinner, Flex, Avatar, Text, Box } from "@chakra-ui/react";
 import { Fragment } from "react";

@@ -4,7 +4,6 @@ import {
   AlertTitle,
   Box,
   Flex,
-  Grid,
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
@@ -49,7 +48,13 @@ const Pendings = () => {
   );
   useEffect(() => {
     refetch();
-  }, [NewCompleted, NewCompletedLoading, NewCancelled, NewCancelledLoading]);
+  }, [
+    NewCompleted,
+    NewCompletedLoading,
+    NewCancelled,
+    NewCancelledLoading,
+    refetch,
+  ]);
 
   useEffect(() => {
     if (!Loading && Data && Data?.queues?.totalFiltered !== 0) {

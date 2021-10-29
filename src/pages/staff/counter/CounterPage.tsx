@@ -114,7 +114,7 @@ const Queue = (props: any) => {
   const { number, counter } = props;
   return (
     <Flex
-      bg="gray.200"
+      bg={useColorModeValue("gray.200", "gray.600")}
       rounded="sm"
       p="2"
       justifyContent="space-between"
@@ -122,7 +122,7 @@ const Queue = (props: any) => {
       shadow="sm"
     >
       <Box
-        bg="gray.300"
+        bg={useColorModeValue("gray.300", "gray.500")}
         rounded="sm"
         p={isMobile ? "3" : "2"}
         px="7"
@@ -132,17 +132,23 @@ const Queue = (props: any) => {
         <Text
           fontSize={isMobile ? "2xl" : "4xl"}
           fontWeight="bold"
-          color="gray.600"
+          color={useColorModeValue("gray.600", "white")}
         >
           {number}
         </Text>
       </Box>
 
-      <Box rounded="sm" p="2" px="7" m="2" borderBottom={`5px solid black `}>
+      <Box
+        rounded="sm"
+        p="2"
+        px="7"
+        m="2"
+        borderBottom={`5px solid  ${useColorModeValue("black", "#E2E8F0")} `}
+      >
         <Text
           fontSize={isMobile ? "1xl" : "2xl"}
           fontWeight="bold"
-          color="gray.600"
+          color={useColorModeValue("gray.600", "white")}
         >
           Counter {counter}
         </Text>

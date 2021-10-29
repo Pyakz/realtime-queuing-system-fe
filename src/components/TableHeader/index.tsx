@@ -1,10 +1,4 @@
-import {
-  SimpleGrid,
-  useColorModeValue,
-  Flex,
-  Checkbox,
-  Text,
-} from "@chakra-ui/react";
+import { SimpleGrid, useColorModeValue, Flex, Text } from "@chakra-ui/react";
 
 const TableHeader = ({ names }: any) => {
   const BG = useColorModeValue("white", "gray.700");

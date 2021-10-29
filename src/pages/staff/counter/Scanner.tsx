@@ -113,11 +113,28 @@ const Scanner = () => {
       }
     }
   };
+  const textColor = useColorModeValue("black", "white");
   const colorClose = useColorModeValue("orange", "gray");
   if (isLargerThan600) {
     return (
-      <Flex p={3} justifyContent="center" alignItems="center" height="90vh">
+      <Flex
+        p={3}
+        justifyContent="center"
+        alignItems="center"
+        height="90vh"
+        flexDirection="column"
+      >
         <Text>Scanner is available only on Mobile Devices.</Text>
+        <Button
+          onClick={() => {
+            removeAuthToken();
+            history.push("/login");
+          }}
+          colorScheme="blue"
+          m="2"
+        >
+          Logout
+        </Button>
       </Flex>
     );
   }
@@ -150,7 +167,7 @@ const Scanner = () => {
 
       <Box p={4}>
         <Input
-          disabled={!manual}
+          disabled={!manual && !isNotEmpty}
           variant="outline"
           placeholder="Name"
           shadow="sm"
@@ -161,10 +178,10 @@ const Scanner = () => {
               return { ...prev, name: e.target.value };
             });
           }}
-          color="black"
+          color={textColor}
         />
         <Input
-          disabled={!manual}
+          disabled={!manual && !isNotEmpty}
           variant="outline"
           shadow="sm"
           focusBorderColor="cyan.400"
@@ -176,10 +193,10 @@ const Scanner = () => {
             });
           }}
           my="2"
-          color="black"
+          color={textColor}
         />
         <Input
-          disabled={!manual}
+          disabled={!manual && !isNotEmpty}
           variant="outline"
           shadow="sm"
           focusBorderColor="cyan.400"
@@ -190,33 +207,27 @@ const Scanner = () => {
               return { ...prev, cellphoneNumber: e.target.value };
             });
           }}
-          color="black"
+          color={textColor}
         />
       </Box>
 
       <Flex
         w="full"
-        justifyContent="center"
+        justifyContent="space-between"
         alignItems="flex-end"
         p={2}
         h="100%"
       >
         {isNotEmpty ? (
           <Fragment>
-            <Button
-              onClick={cancel}
-              colorScheme={colorClose}
-              d="block"
-              w="100%"
-              mx="2"
-            >
+            <Button onClick={cancel} colorScheme={colorClose} w="100%" mx="2">
               Cancel
             </Button>
             <Button
               onClick={handleScanner}
               colorScheme="green"
               isLoading={Loading}
-              d="block"
+              variant="solid"
               w="100%"
               mx="2"
             >
@@ -235,7 +246,6 @@ const Scanner = () => {
                 });
               }}
               colorScheme={colorClose}
-              d="block"
               w="100%"
               mx="2"
             >
@@ -247,7 +257,6 @@ const Scanner = () => {
                 history.push("/login");
               }}
               colorScheme="blue"
-              d="block"
               w="100%"
               mx="2"
             >
