@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import QrReader from "react-qr-reader";
 
 import {
@@ -9,6 +9,7 @@ import {
   Text,
   useMediaQuery,
   useColorModeValue,
+  Input,
 } from "@chakra-ui/react";
 import { isEmpty } from "lodash";
 import { useMutation } from "@apollo/client";
@@ -22,14 +23,19 @@ type Scanned = {
   cellphoneNumber: string;
 };
 const Scanner = () => {
-  const [delay, setDelay] = useState<number>();
-  const [isOpen, setOpen] = useState<boolean>();
+  const [delay, setDelay] = useState<number>(3000);
   const [isLargerThan600] = useMediaQuery("(min-width: 600px)");
+  const [result, setResult] = useState<Scanned>({
+    name: "",
+    address: "",
+    cellphoneNumber: "",
+  });
+  const [manual, setManual] = useState<boolean>();
 
   const history = useHistory();
   const [createQueue, { loading: Loading }] = useMutation(CREATE_QUEUE);
+  let isNotEmpty = !isEmpty(result?.name) && !isEmpty(result?.address);
 
-  const [result, setResult] = useState<Scanned>();
   const toast = useToast();
 
   const handleScan = (data: any) => {
@@ -39,13 +45,23 @@ const Scanner = () => {
       cellphoneNumber: data?.split("|")[7],
     };
     if (!isEmpty(scannedData.name) && !isEmpty(data?.split("|")[1])) {
-      setOpen(true);
       setResult(scannedData);
       setDelay(3000);
+      toast.closeAll();
     } else {
-      setOpen(false);
+      // if (!toast.isActive("active-toast")) {
+      //   toast({
+      //     id: "active-toast",
+      //     description: "Invalid QR Code",
+      //     status: "warning",
+      //     duration: 1000,
+      //     isClosable: true,
+      //     position: "top",
+      //   });
+      // }
     }
   };
+
   const handleError = (err: any) => {
     if (!toast.isActive("active-toast")) {
       toast({
@@ -54,13 +70,12 @@ const Scanner = () => {
         status: "warning",
         duration: 5000,
         isClosable: true,
-        position: "top-left",
+        position: "top",
       });
     }
   };
-
   const handleScanner = async () => {
-    if (!result) {
+    if (!isNotEmpty) {
       if (!toast.isActive("active-toast")) {
         toast({
           id: "active-toast",
@@ -68,29 +83,34 @@ const Scanner = () => {
           status: "warning",
           duration: 5000,
           isClosable: true,
-          position: "top-left",
+          position: "top",
         });
       }
     } else {
       await createQueue({
         variables: {
           body: {
-            name: result.name,
-            address: result.address,
-            cellphoneNumber: result.cellphoneNumber,
+            name: result?.name,
+            address: result?.address,
+            cellphoneNumber: result?.cellphoneNumber,
           },
         },
       });
-    }
-
-    if (!Loading) {
-      setOpen(false);
-      toast({
-        description: "Queue, Sucessfuly created.",
-        status: "success",
-        duration: 1000,
-        isClosable: true,
-      });
+      if (!Loading) {
+        setResult({
+          name: "",
+          address: "",
+          cellphoneNumber: "",
+        });
+        toast({
+          description: "Queue, Sucessfuly created.",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+          position: "top",
+        });
+        setManual(false);
+      }
     }
   };
   const colorClose = useColorModeValue("orange", "gray");
@@ -101,72 +121,141 @@ const Scanner = () => {
       </Flex>
     );
   }
+
+  const cancel = () => {
+    setManual(false);
+    setResult({
+      name: "",
+      address: "",
+      cellphoneNumber: "",
+    });
+  };
   return (
-    <Flex flexDirection="column" justifyContent="center" alignItems="center">
-      {!isOpen && (
+    <Flex
+      flexDirection="column"
+      justifyContent="start"
+      alignItems="center"
+      h="100vh"
+    >
+      {!manual && !isNotEmpty ? (
         <QrReader
           delay={delay}
           onError={handleError}
           onScan={handleScan}
-          style={{ width: "100%", height: "100%", marginTop: "3rem" }}
+          style={{ width: "100%" }}
         />
-      )}
-      {isOpen ? (
-        <Flex p={3} justifyContent="center" alignItems="center" height="50vh">
-          <Box p={2}>
-            <p>Name: {result?.name}</p>
-            <p>Address: {result?.address}</p>
-            <p>CP Number: {result?.cellphoneNumber}</p>
-          </Box>
-        </Flex>
       ) : (
-        <Flex p={3} justifyContent="center">
-          <Text>
-            Invalid QR Code or Scanner. Please scan the code properly.
-          </Text>
-        </Flex>
+        <Box bg="red" height="100%" />
       )}
-      {isOpen ? (
-        <Flex p={3} justifyContent="center">
-          <Button
-            onClick={() => setOpen(false)}
-            colorScheme={colorClose}
-            mx="2"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleScanner}
-            colorScheme="blue"
-            mx="2"
-            isLoading={Loading}
-          >
-            Create
-          </Button>
-        </Flex>
-      ) : (
-        <Flex w="100%" mt="8" justifyContent="center">
-          <Button
-            onClick={() => setOpen((prev) => !prev)}
-            colorScheme={colorClose}
-            m="3"
-            rounded="full"
-          >
-            {isOpen ? "Open " : "Close "}
-          </Button>
-          <Button
-            onClick={() => {
-              removeAuthToken();
-              history.push("/login");
-            }}
-            colorScheme="blue"
-            m="3"
-            rounded="full"
-          >
-            Logout
-          </Button>
-        </Flex>
-      )}
+
+      <Box p={4}>
+        <Input
+          disabled={!manual}
+          variant="outline"
+          placeholder="Name"
+          shadow="sm"
+          focusBorderColor="cyan.400"
+          value={result?.name}
+          onChange={(e) => {
+            setResult((prev: any) => {
+              return { ...prev, name: e.target.value };
+            });
+          }}
+          color="black"
+        />
+        <Input
+          disabled={!manual}
+          variant="outline"
+          shadow="sm"
+          focusBorderColor="cyan.400"
+          placeholder="Address"
+          value={result?.address}
+          onChange={(e) => {
+            setResult((prev: any) => {
+              return { ...prev, address: e.target.value };
+            });
+          }}
+          my="2"
+          color="black"
+        />
+        <Input
+          disabled={!manual}
+          variant="outline"
+          shadow="sm"
+          focusBorderColor="cyan.400"
+          placeholder="Cellphone #"
+          value={result?.cellphoneNumber}
+          onChange={(e) => {
+            setResult((prev: any) => {
+              return { ...prev, cellphoneNumber: e.target.value };
+            });
+          }}
+          color="black"
+        />
+      </Box>
+
+      <Flex
+        w="full"
+        justifyContent="center"
+        alignItems="flex-end"
+        p={2}
+        h="100%"
+      >
+        {isNotEmpty ? (
+          <Fragment>
+            <Button
+              onClick={cancel}
+              colorScheme={colorClose}
+              d="block"
+              w="100%"
+              mx="2"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleScanner}
+              colorScheme="green"
+              isLoading={Loading}
+              d="block"
+              w="100%"
+              mx="2"
+            >
+              Create
+            </Button>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <Button
+              onClick={() => {
+                setManual((prev) => !prev);
+                setResult({
+                  name: "",
+                  address: "",
+                  cellphoneNumber: "",
+                });
+              }}
+              colorScheme={colorClose}
+              d="block"
+              w="100%"
+              mx="2"
+            >
+              {manual ? "Scan" : "Manual"}
+            </Button>
+            <Button
+              onClick={() => {
+                removeAuthToken();
+                history.push("/login");
+              }}
+              colorScheme="blue"
+              d="block"
+              w="100%"
+              mx="2"
+            >
+              Logout
+            </Button>
+          </Fragment>
+        )}
+      </Flex>
     </Flex>
   );
 };
