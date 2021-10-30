@@ -25,7 +25,6 @@ const StaffLayout = (props: any) => {
   const { auth } = useAuth();
   const history = useHistory();
   const { colorMode, toggleColorMode } = useColorMode();
-
   return (
     <Fragment>
       <Flex
@@ -37,6 +36,7 @@ const StaffLayout = (props: any) => {
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
           Queue System
         </Text>
+
         <HStack spacing={{ base: "0", md: "6" }}>
           <IconButton
             size="md"
@@ -45,7 +45,6 @@ const StaffLayout = (props: any) => {
             aria-label="open menu"
             onClick={toggleColorMode}
             icon={colorMode === "light" ? <FiMoon /> : <FiSun />}
-            // marginRight={3}
           />
           <Menu>
             <MenuButton
@@ -83,9 +82,6 @@ const StaffLayout = (props: any) => {
               bg={useColorModeValue("white", "gray.700")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>Settings</MenuItem>
-              <MenuDivider />
               <MenuItem
                 onClick={() => {
                   console.log("Logout");

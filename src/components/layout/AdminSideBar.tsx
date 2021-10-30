@@ -68,7 +68,6 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
   return (
     <Box
-      transition="3s ease"
       bg={useColorModeValue("white", "gray.700")}
       borderRight="1px"
       borderRightColor={useColorModeValue("white", "gray.700")}
@@ -77,6 +76,9 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       h="full"
       shadow="sm"
       {...rest}
+      _hover={{
+        transition: "3s ease",
+      }}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
@@ -222,9 +224,6 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               bg={useColorModeValue("white", "gray.700")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>Settings</MenuItem>
-              <MenuDivider />
               <MenuItem
                 onClick={() => {
                   console.log("Logout");

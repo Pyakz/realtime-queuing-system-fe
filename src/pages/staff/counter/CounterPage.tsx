@@ -82,15 +82,26 @@ const CounterPage = () => {
       "processedBy.counterNumber",
     ]);
     UI = (
-      <Grid templateColumns={`repeat(${isMobile ? "1" : "2"}, 1fr)`} gap={5}>
-        {chronologicalData.map((queue: any) => (
-          <Queue
-            number={queue.number}
-            key={queue._id}
-            counter={queue.processedBy.counterNumber}
-          />
-        ))}
-      </Grid>
+      <Box>
+        <Text
+          fontSize="4xl"
+          fontWeight="bold"
+          color="gray.500"
+          textAlign="center"
+          my="2"
+        >
+          COUNTER
+        </Text>
+        <Grid templateColumns={`repeat(${isMobile ? "1" : "2"}, 1fr)`} gap={5}>
+          {chronologicalData.map((queue: any) => (
+            <Queue
+              number={queue.number}
+              key={queue._id}
+              counter={queue.processedBy.counterNumber}
+            />
+          ))}
+        </Grid>
+      </Box>
     );
   }
 
@@ -125,8 +136,7 @@ const Queue = (props: any) => {
         bg={useColorModeValue("gray.300", "gray.500")}
         rounded="sm"
         p={isMobile ? "3" : "2"}
-        px="7"
-        w="25%"
+        w="30%"
         textAlign="center"
       >
         <Text

@@ -110,7 +110,7 @@ const Login = () => {
           />
 
           <Formik
-            initialValues={{ username: "staff", password: "staff" }}
+            initialValues={{ username: "", password: "" }}
             onSubmit={(values) => Sumbit(values)}
             validationSchema={loginInputSchema}
           >
@@ -133,6 +133,9 @@ const Login = () => {
                           {...field}
                           id="username"
                           placeholder="Username"
+                          _placeholder={{
+                            color: textColor,
+                          }}
                           focusBorderColor="gray.500"
                           borderColor={BorderColor}
                           color={textColor}
@@ -171,6 +174,9 @@ const Login = () => {
                           {...field}
                           id="password"
                           placeholder="Password"
+                          _placeholder={{
+                            color: textColor,
+                          }}
                           focusBorderColor="gray.500"
                           borderColor={BorderColor}
                           pr="4.5rem"

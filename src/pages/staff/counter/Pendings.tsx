@@ -123,7 +123,13 @@ const Pendings = () => {
 
   return (
     <Box p="4" height="100%">
-      <Text fontSize="4xl" fontWeight="bold" color="gray.500">
+      <Text
+        fontSize="4xl"
+        fontWeight="bold"
+        color="gray.500"
+        textAlign="center"
+        my="2"
+      >
         PENDINGS
       </Text>
       {UI}

@@ -14,6 +14,7 @@ import {
 import { isEmpty } from "lodash";
 import { Fragment, useEffect, useState } from "react";
 import CenterSpinner from "../../components/common/CenterSpinner";
+import { useAuth } from "../../context/AuthContext";
 import StaffLayout from "../../layout/StaffLayout";
 import { CHANGE_STATUS } from "./transaction/__apolloMutation";
 import { CURRENT_QUEUES } from "./__apolloQueries";
@@ -103,6 +104,8 @@ type TPreviousBox = {
 
 const QueuesBody = (props: any) => {
   const { data, states } = props;
+  const { auth } = useAuth();
+
   const [ChangeStatus, { data: Data, loading: Loading }] =
     useMutation(CHANGE_STATUS);
   const { next, current, setNext, setCurrent, setPrevious, previous } = states;
@@ -151,18 +154,21 @@ const QueuesBody = (props: any) => {
           mt="4"
         >
           <Text
-            fontSize="2xl"
-            color={useColorModeValue("orange", "white")}
-            my="4"
+            // bg={useColorModeValue("gray.300", "gray.600")}
+            fontSize="3xl"
+            rounded="md"
+            p="1"
+            fontWeight="bold"
+            color={useColorModeValue("gray.500", "white")}
           >
-            Current Serving
+            COUNTER {auth.counterNumber}
           </Text>
           <Text
             fontSize="3xl"
-            color={useColorModeValue("gray", "white")}
+            color={useColorModeValue("gray.500", "white")}
             my="4"
           >
-            Ticket Number
+            Current Queue
           </Text>
           <Box
             rounded="md"

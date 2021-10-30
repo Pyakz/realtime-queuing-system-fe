@@ -5,6 +5,7 @@ type AuthType = {
   _id?: string;
   role?: string;
   username?: string;
+  counterNumber?: number;
 };
 
 export type AuthContextType = {

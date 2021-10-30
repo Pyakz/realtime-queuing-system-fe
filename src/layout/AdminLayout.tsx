@@ -9,7 +9,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
         shadow="sm"
         w="100%"
         h="100%"
-        p={3}
+        p={4}
         rounded="sm"
       >
         {children}
