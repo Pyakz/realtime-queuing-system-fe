@@ -19,12 +19,7 @@ type TDashboard = {
   averageCancelled: number;
 };
 const AdminPage = () => {
-  const {
-    data: Data,
-    loading: Loading,
-    error: QueryError,
-    refetch,
-  } = useQuery(DASHBOARD);
+  const { data: Data, loading: Loading, refetch } = useQuery(DASHBOARD);
 
   const { data: NewProcessing, loading: NewProcessingLoading } =
     useSubscription(NEW_PENDING, {
@@ -54,9 +49,12 @@ const AdminPage = () => {
     NewProcessingLoading,
     NewCancelledLoading,
     NewPendingLoading,
+    refetch,
   ]);
   const BG = useColorModeValue("gray.200", "gray.700");
   const BGCounter = useColorModeValue("white", "gray.700");
+
+  const DATA: TDashboard = Data?.dashboard;
   return (
     <AdminLayout>
       {Loading ? (
@@ -70,7 +68,7 @@ const AdminPage = () => {
               </Text>
 
               <Text fontSize="4xl" fontWeight="bold" m="2">
-                {Data?.dashboard?.totalQueue}
+                {DATA.totalQueue}
               </Text>
             </Box>
             <Box bg={BG} rounded="sm" shadow="sm" p="3">
@@ -79,7 +77,7 @@ const AdminPage = () => {
               </Text>
 
               <Text fontSize="4xl" fontWeight="bold" m="2">
-                {Data?.dashboard?.averageCompleted}
+                {DATA.averageCompleted}
                 <span
                   style={{
                     fontSize: "1.5rem",
@@ -95,7 +93,7 @@ const AdminPage = () => {
                 Average Cancelled
               </Text>
               <Text fontSize="4xl" fontWeight="bold" m="2">
-                {Data?.dashboard?.averageCancelled}
+                {DATA.averageCancelled}
                 <span
                   style={{
                     fontSize: "1.5rem",
@@ -111,7 +109,7 @@ const AdminPage = () => {
                 Total Person
               </Text>
               <Text fontSize="4xl" fontWeight="bold" m="2">
-                {Data?.dashboard?.totalPerson}
+                {DATA.totalPerson}
               </Text>
             </Box>
             <Box bg={BG} rounded="sm" shadow="sm" p="3">
@@ -119,7 +117,7 @@ const AdminPage = () => {
                 Total Completed
               </Text>
               <Text fontSize="4xl" fontWeight="bold" m="2">
-                {Data?.dashboard?.totalCompleted}
+                {DATA.totalCompleted}
               </Text>
             </Box>
             <Box bg={BG} rounded="sm" shadow="sm" p="3">
@@ -127,7 +125,7 @@ const AdminPage = () => {
                 Total Cancelled
               </Text>
               <Text fontSize="4xl" fontWeight="bold" m="2">
-                {Data?.dashboard?.totalCancelled}
+                {DATA.totalCancelled}
               </Text>
             </Box>
           </SimpleGrid>

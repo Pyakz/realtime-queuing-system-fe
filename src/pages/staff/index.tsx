@@ -18,7 +18,6 @@ import { useAuth } from "../../context/AuthContext";
 import StaffLayout from "../../layout/StaffLayout";
 import { CHANGE_STATUS } from "./transaction/__apolloMutation";
 import { CURRENT_QUEUES } from "./__apolloQueries";
-
 export enum STATUS_ENUM {
   PENDING = "PENDING",
   COMPLETED = "COMPLETED",
@@ -35,7 +34,9 @@ const StaffPage = () => {
     data: Data,
     loading: Loading,
     error: QueryError,
-  } = useQuery(CURRENT_QUEUES);
+  } = useQuery(CURRENT_QUEUES, {
+    fetchPolicy: "network-only",
+  });
   useEffect(() => {
     if (!Loading && Data) {
       setCurrent(Data?.currentQueueByUser?.current);
@@ -108,8 +109,11 @@ const QueuesBody = (props: any) => {
 
   const [ChangeStatus, { data: Data, loading: Loading }] =
     useMutation(CHANGE_STATUS);
+
   const { next, current, setNext, setCurrent, setPrevious, previous } = states;
+
   const toast = useToast();
+
   useEffect(() => {
     if (!Loading) {
       setCurrent(Data?.updateQueueStatus?.current);
@@ -141,8 +145,9 @@ const QueuesBody = (props: any) => {
       });
     }
   };
+
   return (
-    <div className="parent">
+    <div className="parent my-first-step">
       <div className="div1">
         <Box
           p="2"
@@ -175,6 +180,7 @@ const QueuesBody = (props: any) => {
             bg={useColorModeValue("orange", "gray.600")}
             m="5"
             py="8"
+            className="step-1"
           >
             <Text fontSize="9xl" color="white" fontWeight="bold">
               {current?.number}
@@ -192,6 +198,7 @@ const QueuesBody = (props: any) => {
                 w="100%"
                 onClick={() => handleChangeStatus(STATUS_ENUM.CANCELLED)}
                 isLoading={Loading}
+                className="step-2"
               >
                 Cancel
               </Button>
@@ -203,6 +210,7 @@ const QueuesBody = (props: any) => {
                 w="100%"
                 onClick={() => handleChangeStatus(STATUS_ENUM.COMPLETED)}
                 isLoading={Loading}
+                className="step-3"
               >
                 Next
               </Button>
@@ -211,7 +219,7 @@ const QueuesBody = (props: any) => {
         </Box>
       </div>
 
-      <Box className="div2" mt="3" p="3">
+      <Box className="div2 step-4" mt="3" p="3">
         <Text
           p="3"
           fontSize="1xl"

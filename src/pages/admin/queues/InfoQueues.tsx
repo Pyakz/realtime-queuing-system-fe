@@ -15,11 +15,7 @@ import { FIND_QUEUE } from "./_apolloQueries";
 const InfoQueues = (props: any) => {
   const { isOpen, onClose, selectedQueue } = props;
 
-  const {
-    data: Data,
-    loading: Loading,
-    error: QueryError,
-  } = useQuery(FIND_QUEUE, {
+  const { data: Data, loading: Loading } = useQuery(FIND_QUEUE, {
     variables: {
       id: selectedQueue,
     },

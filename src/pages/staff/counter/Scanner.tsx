@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import QrReader from "react-qr-reader";
 
 import {
@@ -10,12 +10,20 @@ import {
   useMediaQuery,
   useColorModeValue,
   Input,
+  useDisclosure,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
 } from "@chakra-ui/react";
 import { isEmpty } from "lodash";
 import { useMutation } from "@apollo/client";
 import { CREATE_QUEUE } from "./__apolloMutations";
 import { removeAuthToken } from "../../../utils/token";
 import { useHistory } from "react-router";
+import Joyride, { Step, ACTIONS, EVENTS, STATUS } from "react-joyride";
 
 type Scanned = {
   name: string;
@@ -38,6 +46,49 @@ const Scanner = () => {
 
   const toast = useToast();
 
+  const [stepIndex, setStepIndex] = useState<number>(0);
+  const [run, setRun] = useState<boolean>(false);
+  const { onOpen, isOpen, onClose } = useDisclosure();
+  const scannerFirstTime = localStorage.getItem("scannerFirstTime");
+  useEffect(() => {
+    if (Boolean(scannerFirstTime) === false && isEmpty(scannerFirstTime)) {
+      onOpen();
+    }
+  }, [scannerFirstTime, onOpen]);
+
+  const steps: Step[] = [
+    {
+      target: ".scanner-step-1",
+      content:
+        "This is the QR Code scanner. You can scan the existing SSCT QR code for smoother experience or",
+    },
+    {
+      target: ".scanner-step-2",
+      content: "You can also input manually the entries.",
+    },
+    {
+      target: ".scanner-step-3",
+      content:
+        "After scanning the information of the person will show here in this section.",
+    },
+    {
+      target: ".scanner-step-4",
+      content: "Lastly, the logout button.",
+    },
+  ];
+
+  const handleJoyrideCallback = (data: any) => {
+    const { action, index, status, type } = data;
+    if ([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND].includes(type)) {
+      // Update state to advance the tour
+      setStepIndex(index + (action === ACTIONS.PREV ? -1 : 1));
+    } else if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
+      // Need to set our running state to false, so we can restart if we click start again.
+      localStorage.setItem("scannerFirstTime", "false");
+      setRun(false);
+    }
+  };
+
   const handleScan = (data: any) => {
     const scannedData = {
       name: data?.split("|")[0],
@@ -49,16 +100,16 @@ const Scanner = () => {
       setDelay(3000);
       toast.closeAll();
     } else {
-      // if (!toast.isActive("active-toast")) {
-      //   toast({
-      //     id: "active-toast",
-      //     description: "Invalid QR Code",
-      //     status: "warning",
-      //     duration: 1000,
-      //     isClosable: true,
-      //     position: "top",
-      //   });
-      // }
+      if (!toast.isActive("active-toast")) {
+        toast({
+          id: "active-toast",
+          description: "Invalid QR Code",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+          position: "bottom",
+        });
+      }
     }
   };
 
@@ -154,18 +205,86 @@ const Scanner = () => {
       alignItems="center"
       h="100vh"
     >
+      <Modal
+        blockScrollOnMount={false}
+        closeOnOverlayClick={false}
+        isOpen={isOpen}
+        onClose={onClose}
+        isCentered
+        size="sm"
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Walkthrough</ModalHeader>
+          <ModalBody>
+            <Text fontWeight="bold" mb="1rem">
+              It seems like this is your first time here. Do you want to have a
+              walkthrough on our User Interface?
+            </Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              colorScheme="blue"
+              mx="2"
+              onClick={() => {
+                setRun(true);
+                onClose();
+              }}
+            >
+              Yes
+            </Button>
+            <Button
+              variant="ghost"
+              mx="2"
+              onClick={() => {
+                setRun(false);
+                localStorage.setItem("scannerFirstTime", "false");
+                onClose();
+              }}
+            >
+              Skip
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Joyride
+        steps={steps}
+        stepIndex={stepIndex}
+        run={run}
+        continuous
+        callback={handleJoyrideCallback}
+        showProgress={true}
+        showSkipButton
+        floaterProps={{
+          autoOpen: true,
+        }}
+        styles={{
+          options: {
+            arrowColor: "white",
+            backgroundColor: "white",
+            overlayColor: "rgba(0, 0, 0, 0.8)",
+            primaryColor: "red",
+            textColor: "gray",
+            width: 400,
+            zIndex: 1000,
+          },
+        }}
+      />
+
       {!manual && !isNotEmpty ? (
         <QrReader
           delay={delay}
           onError={handleError}
           onScan={handleScan}
           style={{ width: "100%" }}
+          className="scanner-step-1"
         />
       ) : (
-        <Box bg="red" height="100%" />
+        <Box height="35%" />
       )}
 
-      <Box p={4}>
+      <Box p={4} className="scanner-step-3">
         <Input
           disabled={!manual && !isNotEmpty}
           variant="outline"
@@ -211,13 +330,7 @@ const Scanner = () => {
         />
       </Box>
 
-      <Flex
-        w="full"
-        justifyContent="space-between"
-        alignItems="flex-end"
-        p={2}
-        h="100%"
-      >
+      <Flex w="full" justifyContent="space-between" alignItems="flex-end" p={2}>
         {isNotEmpty ? (
           <Fragment>
             <Button onClick={cancel} colorScheme={colorClose} w="100%" mx="2">
@@ -248,6 +361,7 @@ const Scanner = () => {
               colorScheme={colorClose}
               w="100%"
               mx="2"
+              className="scanner-step-2"
             >
               {manual ? "Scan" : "Manual"}
             </Button>
@@ -259,6 +373,7 @@ const Scanner = () => {
               colorScheme="blue"
               w="100%"
               mx="2"
+              className="scanner-step-4"
             >
               Logout
             </Button>

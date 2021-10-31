@@ -15,11 +15,7 @@ import { FIND_USER } from "./_apolloQueries";
 const InfoDrawer = (props: any) => {
   const { isOpen, onClose, selectedStaff } = props;
 
-  const {
-    data: Data,
-    loading: Loading,
-    error: QueryError,
-  } = useQuery(FIND_USER, {
+  const { data: Data, loading: Loading } = useQuery(FIND_USER, {
     variables: {
       id: selectedStaff,
     },

@@ -16,11 +16,7 @@ import { FIND_PERSON } from "./_apolloQueries";
 const InfoPersons = (props: any) => {
   const { isOpen, onClose, selectedPerson } = props;
   console.log(selectedPerson);
-  const {
-    data: Data,
-    loading: Loading,
-    error: QueryError,
-  } = useQuery(FIND_PERSON, {
+  const { data: Data, loading: Loading } = useQuery(FIND_PERSON, {
     variables: {
       id: selectedPerson,
     },

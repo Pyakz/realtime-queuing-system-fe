@@ -188,6 +188,7 @@ export const Row = ({ rowData }: any) => {
       my="2"
       w={isMobile ? "50rem" : "100%"}
       pl={isMobile ? "3" : "0"}
+      className="admin-sidebar-step-2"
     >
       {open && (
         <InfoQueues
