@@ -26,8 +26,7 @@ import { LOGIN } from "./_apolloMutations";
 import { setAuthToken } from "../../utils/token";
 import { Redirect, Link as NavLink } from "react-router-dom";
 import * as Yup from "yup";
-
-const LOGO = "https://banguismv.me/img/Kobe.png";
+import LOGO from "../../assets/img/LOGO.png";
 
 const Login = () => {
   const toast = useToast();
@@ -106,7 +105,7 @@ const Login = () => {
             boxSize="120px"
             src={LOGO}
             style={{ margin: Mobile420 ? "2.5rem 0" : "" }}
-            alt="Marky Cute"
+            alt="Queue Management System"
           />
 
           <Formik
