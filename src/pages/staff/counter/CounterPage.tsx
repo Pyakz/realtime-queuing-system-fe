@@ -16,8 +16,11 @@ import { STATUS_ENUM } from "..";
 import CenterSpinner from "../../../components/common/CenterSpinner";
 import { FIND_MANY_QUEUES } from "../../admin/queues/_apolloQueries";
 import { NEW_PENDING } from "./__apolloSubscriptions";
+import useSound from "use-sound";
 
 const CounterPage = () => {
+  const [play, { stop }] = useSound("../../../assets/sounds/success.mp3");
+
   const [isMobile] = useMediaQuery("(max-width: 650px)");
   const {
     data: Data,
@@ -48,12 +51,14 @@ const CounterPage = () => {
     if (!NewProcessingLoading || !NewCancelledLoading) {
       refetch();
     }
+    play();
   }, [
     NewProcessing,
     NewProcessingLoading,
     NewCancelled,
     NewCancelledLoading,
     refetch,
+    play,
   ]);
 
   let UI;
