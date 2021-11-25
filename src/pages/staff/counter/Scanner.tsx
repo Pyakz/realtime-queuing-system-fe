@@ -38,7 +38,7 @@ const Scanner = () => {
     address: "",
     cellphoneNumber: "",
   });
-  const [manual, setManual] = useState<boolean>();
+  const [manual, setManual] = useState<boolean>(true);
 
   const history = useHistory();
   const [createQueue, { loading: Loading }] = useMutation(CREATE_QUEUE);
